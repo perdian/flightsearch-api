@@ -12,6 +12,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import de.perdian.flightsearch.api.model.Airport;
 import de.perdian.flightsearch.api.model.Leg;
 
@@ -27,17 +30,27 @@ public class LegQuery implements Serializable, Predicate<Leg> {
     private DurationQuery flightDuration = null;
     private DurationQuery transferDuration = null;
 
-    public List<RouteQuery> toRouteQueries() {
-        List<RouteQuery> routeQueries = new ArrayList<>();
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    public List<LegQuery> flattenMultipleAirportsForDepartureAndArrival() {
+        List<LegQuery> legQueries = new ArrayList<>(this.getOriginAirportCodes().size() * this.getDestinationAirportCodes().size());
         for (String originAirportCode : this.getOriginAirportCodes()) {
             for (String destinationAirportCode : this.getDestinationAirportCodes()) {
-                RouteQuery routeQuery = new RouteQuery();
-                routeQuery.setOriginAirportCode(originAirportCode);
-                routeQuery.setDestinationAirportCode(destinationAirportCode);
-                routeQueries.add(routeQuery);
+                LegQuery legQuery = new LegQuery();
+                legQuery.setArrivalDateTime(this.getArrivalDateTime());
+                legQuery.setBlacklistedAirportCodes(this.getBlacklistedAirportCodes());
+                legQuery.setDepartureDateTime(this.getDepartureDateTime());
+                legQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
+                legQuery.setFlightDuration(this.getFlightDuration());
+                legQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
+                legQuery.setTransferDuration(this.getTransferDuration());
+                legQueries.add(legQuery);
             }
         }
-        return routeQueries;
+        return legQueries;
     }
 
     @Override
