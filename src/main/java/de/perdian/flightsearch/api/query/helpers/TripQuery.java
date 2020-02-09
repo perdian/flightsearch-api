@@ -29,7 +29,9 @@ public class TripQuery implements Predicate<Trip>, Serializable {
     }
 
     public TripType computeTripType() {
-        if (this.getLegs().size() == 1) {
+        if (this.getLegs() == null || this.getLegs().isEmpty()) {
+            return null;
+        } else if (this.getLegs().size() == 1) {
             return TripType.ONEWAY;
         } else if (this.getLegs().size() == 2) {
             boolean firstDepartureLastArrivalIdentical = this.getLegs().get(0).getOriginAirportCodes().containsAll(this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes()) && this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes().containsAll(this.getLegs().get(0).getOriginAirportCodes());
@@ -74,22 +76,22 @@ public class TripQuery implements Predicate<Trip>, Serializable {
             .collect(Collectors.toList());
     }
 
-    private List<List<LegQuery>> flattenMultipleAirportsForDepartureAndArrival(List<List<LegQuery>> existingList, List<LegQuery> nextFlightQueries) {
-        List<LegQuery> nextRouteQueries = nextFlightQueries.get(0).flattenMultipleAirportsForDepartureAndArrival();
+    private List<List<LegQuery>> flattenMultipleAirportsForDepartureAndArrival(List<List<LegQuery>> existingList, List<LegQuery> moreLegs) {
+        List<LegQuery> nextLegs = moreLegs.get(0).flattenMultipleAirportsForDepartureAndArrival();
         List<List<LegQuery>> resultList = new ArrayList<>();
         if (existingList.isEmpty()) {
-            nextRouteQueries.forEach(nextRouteQuery -> resultList.add(Arrays.asList(nextRouteQuery)));
+            nextLegs.forEach(nextLegQuery -> resultList.add(Arrays.asList(nextLegQuery)));
         } else {
             for (List<LegQuery> existingListItem : existingList) {
-                for (LegQuery nextRouteQuery : nextRouteQueries) {
+                for (LegQuery nextLeg : nextLegs) {
                     List<LegQuery> resultListItem = new ArrayList<>(existingListItem);
-                    resultListItem.add(nextRouteQuery);
+                    resultListItem.add(nextLeg);
                     resultList.add(resultListItem);
                 }
             }
         }
-        List<LegQuery> remainingFlights = nextFlightQueries.subList(1, nextFlightQueries.size());
-        return remainingFlights.isEmpty() ? resultList : this.flattenMultipleAirportsForDepartureAndArrival(resultList, remainingFlights);
+        List<LegQuery> remainingLegs = moreLegs.subList(1, moreLegs.size());
+        return remainingLegs.isEmpty() ? resultList : this.flattenMultipleAirportsForDepartureAndArrival(resultList, remainingLegs);
     }
 
     public List<LegQuery> getLegs() {

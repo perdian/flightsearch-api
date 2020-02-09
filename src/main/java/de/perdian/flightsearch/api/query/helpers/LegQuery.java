@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,21 +37,27 @@ public class LegQuery implements Serializable, Predicate<Leg> {
     }
 
     public List<LegQuery> flattenMultipleAirportsForDepartureAndArrival() {
-        List<LegQuery> legQueries = new ArrayList<>(this.getOriginAirportCodes().size() * this.getDestinationAirportCodes().size());
-        for (String originAirportCode : this.getOriginAirportCodes()) {
-            for (String destinationAirportCode : this.getDestinationAirportCodes()) {
-                LegQuery legQuery = new LegQuery();
-                legQuery.setArrivalDateTime(this.getArrivalDateTime());
-                legQuery.setBlacklistedAirportCodes(this.getBlacklistedAirportCodes());
-                legQuery.setDepartureDateTime(this.getDepartureDateTime());
-                legQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
-                legQuery.setFlightDuration(this.getFlightDuration());
-                legQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
-                legQuery.setTransferDuration(this.getTransferDuration());
-                legQueries.add(legQuery);
+        if (this.getOriginAirportCodes() == null || this.getOriginAirportCodes().isEmpty()) {
+            throw new IllegalArgumentException("No origin airport codes specified!");
+        } else if (this.getDestinationAirportCodes() == null || this.getDestinationAirportCodes().isEmpty()) {
+            throw new IllegalArgumentException("No destination airport codes specified!");
+        } else {
+            List<LegQuery> legQueries = new ArrayList<>(this.getOriginAirportCodes().size() * this.getDestinationAirportCodes().size());
+            for (String originAirportCode : this.getOriginAirportCodes()) {
+                for (String destinationAirportCode : this.getDestinationAirportCodes()) {
+                    LegQuery legQuery = new LegQuery();
+                    legQuery.setArrivalDateTime(this.getArrivalDateTime());
+                    legQuery.setBlacklistedAirportCodes(this.getBlacklistedAirportCodes());
+                    legQuery.setDepartureDateTime(this.getDepartureDateTime());
+                    legQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
+                    legQuery.setFlightDuration(this.getFlightDuration());
+                    legQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
+                    legQuery.setTransferDuration(this.getTransferDuration());
+                    legQueries.add(legQuery);
+                }
             }
+            return Collections.unmodifiableList(legQueries);
         }
-        return legQueries;
     }
 
     @Override
