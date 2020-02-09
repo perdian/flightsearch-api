@@ -25,21 +25,12 @@ public class TripQuery implements Predicate<Trip>, Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-    }
-
-    public TripType computeTripType() {
-        if (this.getLegs() == null || this.getLegs().isEmpty()) {
-            return null;
-        } else if (this.getLegs().size() == 1) {
-            return TripType.ONEWAY;
-        } else if (this.getLegs().size() == 2) {
-            boolean firstDepartureLastArrivalIdentical = this.getLegs().get(0).getOriginAirportCodes().containsAll(this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes()) && this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes().containsAll(this.getLegs().get(0).getOriginAirportCodes());
-            boolean firstArrivalLastDepartureIdentical = this.getLegs().get(0).getDestinationAirportCodes().containsAll(this.getLegs().get(this.getLegs().size() - 1).getOriginAirportCodes()) && this.getLegs().get(this.getLegs().size() - 1).getOriginAirportCodes().containsAll(this.getLegs().get(0).getDestinationAirportCodes());
-            return firstDepartureLastArrivalIdentical && firstArrivalLastDepartureIdentical ? TripType.ROUNDTRIP : TripType.MULTILOCATIONTRIP;
-        } else {
-            return TripType.MULTILOCATIONTRIP;
-        }
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        toStringBuilder.append("tripType", this.getTripType());
+        toStringBuilder.append("legs", this.getLegs());
+        toStringBuilder.append("cabinClass", this.getCabinClass());
+        toStringBuilder.append("passengerCount", this.getPassengerCount());
+        return toStringBuilder.toString();
     }
 
     @Override
@@ -92,6 +83,20 @@ public class TripQuery implements Predicate<Trip>, Serializable {
         }
         List<LegQuery> remainingLegs = moreLegs.subList(1, moreLegs.size());
         return remainingLegs.isEmpty() ? resultList : this.flattenMultipleAirportsForDepartureAndArrival(resultList, remainingLegs);
+    }
+
+    public TripType getTripType() {
+        if (this.getLegs() == null || this.getLegs().isEmpty()) {
+            return null;
+        } else if (this.getLegs().size() == 1) {
+            return TripType.ONEWAY;
+        } else if (this.getLegs().size() == 2) {
+            boolean firstDepartureLastArrivalIdentical = this.getLegs().get(0).getOriginAirportCodes().containsAll(this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes()) && this.getLegs().get(this.getLegs().size() - 1).getDestinationAirportCodes().containsAll(this.getLegs().get(0).getOriginAirportCodes());
+            boolean firstArrivalLastDepartureIdentical = this.getLegs().get(0).getDestinationAirportCodes().containsAll(this.getLegs().get(this.getLegs().size() - 1).getOriginAirportCodes()) && this.getLegs().get(this.getLegs().size() - 1).getOriginAirportCodes().containsAll(this.getLegs().get(0).getDestinationAirportCodes());
+            return firstDepartureLastArrivalIdentical && firstArrivalLastDepartureIdentical ? TripType.ROUNDTRIP : TripType.MULTILOCATIONTRIP;
+        } else {
+            return TripType.MULTILOCATIONTRIP;
+        }
     }
 
     public List<LegQuery> getLegs() {
