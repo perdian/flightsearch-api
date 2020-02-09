@@ -17,7 +17,7 @@ public class QuoteQuery implements Predicate<Quote> {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
     public boolean testAny(List<Quote> references) {

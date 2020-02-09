@@ -5,12 +5,19 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Leg implements Serializable {
 
     static final long serialVersionUID = 1L;
 
     private List<LegItem> items = Collections.emptyList();
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+    }
 
     @Override
     public boolean equals(Object that) {

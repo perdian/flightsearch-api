@@ -20,9 +20,24 @@ public class DateTimeQuery implements Serializable, Predicate<LocalDateTime> {
     private LocalTime minTime = null;
     private LocalTime maxTime = null;
 
+    public DateTimeQuery() {
+    }
+
+    public DateTimeQuery(LocalDate date) {
+        this.setDate(date);
+    }
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        toStringBuilder.append("date", this.getDate());
+        if (this.getMinTime() != null) {
+            toStringBuilder.append("minTime", this.getMinTime());
+        }
+        if (this.getMaxTime() != null) {
+            toStringBuilder.append("maxTime", this.getMinTime());
+        }
+        return toStringBuilder.toString();
     }
 
     @Override

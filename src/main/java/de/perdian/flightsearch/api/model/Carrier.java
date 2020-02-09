@@ -17,7 +17,7 @@ public class Carrier implements Serializable {
 
     @Override
     public String toString() {
-        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
         toStringBuilder.append("code", this.getCode());
         toStringBuilder.append("name", this.getName());
         return toStringBuilder.toString();

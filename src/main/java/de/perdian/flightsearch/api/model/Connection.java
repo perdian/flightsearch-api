@@ -17,7 +17,7 @@ public class Connection implements Serializable {
 
     @Override
     public String toString() {
-        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
         if (Objects.equals(this.getArrivalAirport(), this.getDepartureAirport())) {
             toStringBuilder.append("airportCode", this.getDepartureAirport().getCode());
         } else {

@@ -33,7 +33,25 @@ public class LegQuery implements Serializable, Predicate<Leg> {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        toStringBuilder.append("originAirportCodes", this.getOriginAirportCodes());
+        toStringBuilder.append("destinationAirportCodes", this.getDestinationAirportCodes());
+        if (this.getDepartureDateTime() != null) {
+            toStringBuilder.append("departureDateTime", this.getDepartureDateTime());
+        }
+        if (this.getArrivalDateTime() != null) {
+            toStringBuilder.append("arrivalDateTime", this.getArrivalDateTime());
+        }
+        if (this.getFlightDuration() != null) {
+            toStringBuilder.append("flightDuration", this.getFlightDuration());
+        }
+        if (this.getTransferDuration() != null) {
+            toStringBuilder.append("transferDuration", this.getTransferDuration());
+        }
+        if (this.getBlacklistedAirportCodes() != null && !this.getBlacklistedAirportCodes().isEmpty()) {
+            toStringBuilder.append("blacklistedAirportCodes", this.getBlacklistedAirportCodes());
+        }
+        return toStringBuilder.toString();
     }
 
     public List<LegQuery> flattenMultipleAirportsForDepartureAndArrival() {
