@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 public class AirportRepository {
 
-    private static final AirportRepository instance = new AirportRepository();
     private static final Logger log = LoggerFactory.getLogger(AirportRepository.class);
+    private static final AirportRepository instance = new AirportRepository();
     private static final char OPENFLIGHTS_FIELD_DELIMITER = '\"';
 
     private Map<String, Airport> airportsByCode = null;
@@ -31,7 +31,7 @@ public class AirportRepository {
     private AirportRepository() {
         try {
 
-            URL countriesResourceURL = AirportRepository.class.getClassLoader().getResource("META-INF/flightsearch-api/countries.dat");
+            URL countriesResourceURL = AirportRepository.class.getResource("/META-INF/flightsearch-api/countries.dat");
             log.debug("Loading countries from resource: {}", countriesResourceURL);
             Map<String, String> countryCodesByTitle = new LinkedHashMap<>();
             try (BufferedReader countriesReader = new BufferedReader(new InputStreamReader(countriesResourceURL.openStream(), "UTF-8"))) {
@@ -44,7 +44,7 @@ public class AirportRepository {
             }
             log.debug("Loaded {} countries from resource: {}", countryCodesByTitle.size(), countriesResourceURL);
 
-            URL airportsResourceURL = AirportRepository.class.getClassLoader().getResource("META-INF/flightsearch-api/airports-extended.dat");
+            URL airportsResourceURL = AirportRepository.class.getResource("/META-INF/flightsearch-api/airports-extended.dat");
             log.debug("Loading airports from resource: {}", airportsResourceURL);
             Map<String, Airport> airportsByCode = new LinkedHashMap<>();
             try (BufferedReader airportsReader = new BufferedReader(new InputStreamReader(airportsResourceURL.openStream(), "UTF-8"))) {

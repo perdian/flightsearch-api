@@ -14,6 +14,13 @@ public class Trip implements Serializable {
 
     private List<Leg> legs = Collections.emptyList();
 
+    public Trip() {
+    }
+
+    public Trip(List<Leg> legs) {
+        this.setLegs(legs);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);

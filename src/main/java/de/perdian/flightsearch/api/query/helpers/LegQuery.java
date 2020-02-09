@@ -24,7 +24,9 @@ public class LegQuery implements Serializable, Predicate<Leg> {
     static final long serialVersionUID = 1L;
 
     private List<String> originAirportCodes = null;
+    private boolean enforceExactOriginAirportCodes = false;
     private List<String> destinationAirportCodes = null;
+    private boolean enforceExactDestinationAirportCodes = false;
     private List<String> blacklistedAirportCodes = Arrays.asList("SVO");
     private DateTimeQuery departureDateTime = null;
     private DateTimeQuery arrivalDateTime = null;
@@ -80,9 +82,9 @@ public class LegQuery implements Serializable, Predicate<Leg> {
 
     @Override
     public boolean test(Leg leg) {
-        if (this.getOriginAirportCodes() != null && !this.getOriginAirportCodes().isEmpty() && !this.getOriginAirportCodes().contains(leg.getFirstItem().getFlight().getScheduledDeparture().getAirport().getCode())) {
+        if (this.isEnforceExactOriginAirportCodes() && this.getOriginAirportCodes() != null && !this.getOriginAirportCodes().isEmpty() && !this.getOriginAirportCodes().contains(leg.getFirstItem().getFlight().getScheduledDeparture().getAirport().getCode())) {
             return false;
-        } else if (this.getDestinationAirportCodes() != null && !this.getDestinationAirportCodes().isEmpty() && !this.getDestinationAirportCodes().contains(leg.getLastItem().getFlight().getScheduledArrival().getAirport().getCode())) {
+        } else if (this.isEnforceExactDestinationAirportCodes() && this.getDestinationAirportCodes() != null && !this.getDestinationAirportCodes().isEmpty() && !this.getDestinationAirportCodes().contains(leg.getLastItem().getFlight().getScheduledArrival().getAirport().getCode())) {
             return false;
         } else if (!this.testBlacklistedAirportCodes(LegQuery.collectAirports(leg))) {
             return false;
@@ -140,11 +142,25 @@ public class LegQuery implements Serializable, Predicate<Leg> {
         this.originAirportCodes = originAirportCodes;
     }
 
+    public boolean isEnforceExactDestinationAirportCodes() {
+        return this.enforceExactDestinationAirportCodes;
+    }
+    public void setEnforceExactDestinationAirportCodes(boolean enforceExactDestinationAirportCodes) {
+        this.enforceExactDestinationAirportCodes = enforceExactDestinationAirportCodes;
+    }
+
     public List<String> getDestinationAirportCodes() {
         return this.destinationAirportCodes;
     }
     public void setDestinationAirportCodes(List<String> destinationAirportCodes) {
         this.destinationAirportCodes = destinationAirportCodes;
+    }
+
+    public boolean isEnforceExactOriginAirportCodes() {
+        return this.enforceExactOriginAirportCodes;
+    }
+    public void setEnforceExactOriginAirportCodes(boolean enforceExactOriginAirportCodes) {
+        this.enforceExactOriginAirportCodes = enforceExactOriginAirportCodes;
     }
 
     public List<String> getBlacklistedAirportCodes() {

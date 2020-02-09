@@ -14,6 +14,13 @@ public class Leg implements Serializable {
 
     private List<LegItem> items = Collections.emptyList();
 
+    public Leg() {
+    }
+
+    public Leg(List<LegItem> items) {
+        this.setItems(items);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);

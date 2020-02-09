@@ -20,6 +20,14 @@ public class Offer implements Serializable {
     private Trip trip = null;
     private List<Quote> quotes = Collections.emptyList();
 
+    public Offer() {
+    }
+
+    public Offer(Trip trip, List<Quote> quotes) {
+        this.setTrip(trip);
+        this.setQuotes(quotes);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
@@ -38,10 +46,7 @@ public class Offer implements Serializable {
         for (Map.Entry<Trip, List<Quote>> quotesByTripEntry : quotesByTrip.entrySet()) {
             List<Quote> mergedQuotes = quotesByTripEntry.getValue();
             Collections.sort(mergedQuotes, Quote::compareByPrice);
-            Offer mergedOffer = new Offer();
-            mergedOffer.setTrip(quotesByTripEntry.getKey());
-            mergedOffer.setQuotes(Collections.unmodifiableList(mergedQuotes));
-            mergedOffers.add(mergedOffer);
+            mergedOffers.add(new Offer(quotesByTripEntry.getKey(), Collections.unmodifiableList(mergedQuotes)));
         }
         mergedOffers.sort(Offer::compareByPrice);
         return Collections.unmodifiableList(mergedOffers);
