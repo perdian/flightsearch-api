@@ -1,6 +1,10 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,6 +58,23 @@ public class Leg implements Serializable {
             hashCodeBuilder.append(i).append(this.getItems().get(i));
         }
         return hashCodeBuilder.toHashCode();
+    }
+
+    public Duration getScheduledDuration() {
+        Instant firstItemDeparture = this.getFirstItem().getFlight().getScheduledDeparture().getLocalDateTime().atZone(this.getFirstItem().getFlight().getScheduledDeparture().getAirport().getTimezoneId()).toInstant();
+        Instant lastItemArrival = this.getLastItem().getFlight().getScheduledArrival().getLocalDateTime().atZone(this.getLastItem().getFlight().getScheduledArrival().getAirport().getTimezoneId()).toInstant();
+        return Duration.between(firstItemDeparture, lastItemArrival);
+    }
+    public String getScheduledDurationFormatted() {
+        if (this.getScheduledDuration() == null) {
+            return null;
+        } else {
+            NumberFormat numberFormat = new DecimalFormat("00");
+            StringBuilder result = new StringBuilder();
+            result.append(this.getScheduledDuration().toMinutes() / 60);
+            result.append(":").append(numberFormat.format(this.getScheduledDuration().toMinutes() % 60));
+            return result.toString();
+        }
     }
 
     public LegItem getFirstItem() {

@@ -1,11 +1,14 @@
 package de.perdian.flightsearch.api.model;
 
+import java.io.Serializable;
 import java.time.Duration;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FlightHistory {
+public class FlightHistory implements Serializable {
+
+    static final long serialVersionUID = 1L;
 
     private AirportContact actualDeparture = null;
     private AirportContact actualArrival = null;

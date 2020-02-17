@@ -1,11 +1,14 @@
 package de.perdian.flightsearch.api.model;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Quote {
+public class Quote implements Serializable {
+
+    static final long serialVersionUID = 1L;
 
     private String provider = null;
     private Instant retrievalDate = null;

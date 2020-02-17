@@ -14,10 +14,10 @@ public class FlightNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
     private String carrierCode = null;
-    private String flightNumber = null;
+    private int flightNumber = 0;
     private String postfix = null;
 
-    public FlightNumber parse(String flightNumber) {
+    public static FlightNumber parse(String flightNumber) {
         Matcher matcher = PATTERN.matcher(flightNumber);
         if (matcher.matches()) {
             return new FlightNumber(matcher.group(1).toUpperCase(), Integer.parseInt(matcher.group(2), 10), matcher.group(3).toUpperCase());
@@ -28,7 +28,7 @@ public class FlightNumber implements Serializable {
 
     private FlightNumber(String carrierCode, int flightNumber, String postfix) {
         this.setCarrierCode(carrierCode);
-        this.setFlightNumber(carrierCode);
+        this.setFlightNumber(flightNumber);
         this.setPostfix(postfix);
     }
 
@@ -65,10 +65,10 @@ public class FlightNumber implements Serializable {
         this.carrierCode = carrierCode;
     }
 
-    public String getFlightNumber() {
+    public int getFlightNumber() {
         return this.flightNumber;
     }
-    private void setFlightNumber(String flightNumber) {
+    private void setFlightNumber(int flightNumber) {
         this.flightNumber = flightNumber;
     }
 
