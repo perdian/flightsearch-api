@@ -18,24 +18,27 @@ public class Flight implements Serializable {
     private AirportContact scheduledDeparture = null;
     private AirportContact scheduledArrival = null;
     private Duration scheduledDuration = null;
+    private AirportContact actualDeparture = null;
+    private AirportContact actualArrival = null;
+    private Duration actualDuration = null;
     private Carrier operatingCarrier = null;
     private FlightNumber operatingFlightNumber = null;
     private List<FlightNumber> codeshareFlightNumbers = null;
-    private FlightHistory flightHistory = null;
+    private Aircraft aircraft = null;
 
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
         toStringBuilder.append("operatingFlightNumber", this.getOperatingFlightNumber());
         toStringBuilder.append("operatingCarrier", this.getOperatingCarrier());
-        if (this.getFlightHistory() == null || this.getFlightHistory().getActualDeparture() == null || this.getFlightHistory().getActualArrival() == null) {
+        if (this.getActualDeparture() == null || this.getActualArrival() == null) {
             toStringBuilder.append("scheduledDeparture", this.getScheduledDeparture());
             toStringBuilder.append("scheduledArrival", this.getScheduledArrival());
             toStringBuilder.append("scheduledDuration", this.getScheduledDuration());
         } else {
-            toStringBuilder.append("actualDeparture", this.getFlightHistory().getActualDeparture());
-            toStringBuilder.append("actualArrival", this.getFlightHistory().getActualArrival());
-            toStringBuilder.append("actualDuration", this.getFlightHistory().getActualDuration());
+            toStringBuilder.append("actualDeparture", this.getActualDeparture());
+            toStringBuilder.append("actualArrival", this.getActualArrival());
+            toStringBuilder.append("actualDuration", this.getActualDuration());
         }
         return toStringBuilder.toString();
     }
@@ -94,6 +97,38 @@ public class Flight implements Serializable {
         this.scheduledDuration = scheduledDuration;
     }
 
+    public String getActualDurationFormatted() {
+        if (this.getActualDuration() == null) {
+            return null;
+        } else {
+            NumberFormat numberFormat = new DecimalFormat("00");
+            StringBuilder result = new StringBuilder();
+            result.append(this.getActualDuration().toMinutes() / 60);
+            result.append(":").append(numberFormat.format(this.getActualDuration().toMinutes() % 60));
+            return result.toString();
+        }
+    }
+    public AirportContact getActualDeparture() {
+        return this.actualDeparture;
+    }
+    public void setActualDeparture(AirportContact actualDeparture) {
+        this.actualDeparture = actualDeparture;
+    }
+
+    public AirportContact getActualArrival() {
+        return this.actualArrival;
+    }
+    public void setActualArrival(AirportContact actualArrival) {
+        this.actualArrival = actualArrival;
+    }
+
+    public Duration getActualDuration() {
+        return this.actualDuration;
+    }
+    public void setActualDuration(Duration actualDuration) {
+        this.actualDuration = actualDuration;
+    }
+
     public Carrier getOperatingCarrier() {
         return this.operatingCarrier;
     }
@@ -115,11 +150,11 @@ public class Flight implements Serializable {
         this.codeshareFlightNumbers = codeshareFlightNumbers;
     }
 
-    public FlightHistory getFlightHistory() {
-        return this.flightHistory;
+    public Aircraft getAircraft() {
+        return this.aircraft;
     }
-    public void setFlightHistory(FlightHistory flightHistory) {
-        this.flightHistory = flightHistory;
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
     }
 
 }

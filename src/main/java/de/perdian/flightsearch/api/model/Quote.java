@@ -13,12 +13,20 @@ public class Quote implements Serializable {
     private String provider = null;
     private Instant retrievalDate = null;
     private Price price = null;
-    private Links links = null;
     private String details = null;
+    private String shoppingDeeplinkUrl = null;
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+    }
+
+    public boolean isCheaperThan(Quote other) {
+        return Quote.compareByPrice(this, other) < 0;
+    }
+
+    public boolean isMoreExpensiveThan(Quote other) {
+        return Quote.compareByPrice(this, other) > 0;
     }
 
     public static int compareByPrice(Quote q1, Quote q2) {
@@ -46,18 +54,18 @@ public class Quote implements Serializable {
         this.price = price;
     }
 
-    public Links getLinks() {
-        return this.links;
-    }
-    public void setLinks(Links links) {
-        this.links = links;
-    }
-
     public String getDetails() {
         return this.details;
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public String getShoppingDeeplinkUrl() {
+        return this.shoppingDeeplinkUrl;
+    }
+    public void setShoppingDeeplinkUrl(String shoppingDeeplinkUrl) {
+        this.shoppingDeeplinkUrl = shoppingDeeplinkUrl;
     }
 
 }
