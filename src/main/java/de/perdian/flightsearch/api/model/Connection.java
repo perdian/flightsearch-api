@@ -17,6 +17,15 @@ public class Connection implements Serializable {
     private Airport departureAirport = null;
     private Duration duration = null;
 
+    public Connection() {
+    }
+
+    public Connection(AirportContact arrivalAirportContact, AirportContact departureAirportContact) {
+        this.setArrivalAirport(arrivalAirportContact.getAirport());
+        this.setDepartureAirport(departureAirportContact.getAirport());
+        this.setDuration(Duration.between(arrivalAirportContact.getZonedDateTime(), departureAirportContact.getZonedDateTime()));
+    }
+
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.Duration;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,8 +61,8 @@ public class Leg implements Serializable {
     }
 
     public Duration getScheduledDuration() {
-        Instant firstItemDeparture = this.getFirstItem().getFlight().getScheduledDeparture().getLocalDateTime().atZone(this.getFirstItem().getFlight().getScheduledDeparture().getAirport().getTimezoneId()).toInstant();
-        Instant lastItemArrival = this.getLastItem().getFlight().getScheduledArrival().getLocalDateTime().atZone(this.getLastItem().getFlight().getScheduledArrival().getAirport().getTimezoneId()).toInstant();
+        ZonedDateTime firstItemDeparture = this.getFirstItem().getFlight().getScheduledDeparture().getZonedDateTime();
+        ZonedDateTime lastItemArrival = this.getLastItem().getFlight().getScheduledArrival().getZonedDateTime();
         return Duration.between(firstItemDeparture, lastItemArrival);
     }
     public String getScheduledDurationFormatted() {

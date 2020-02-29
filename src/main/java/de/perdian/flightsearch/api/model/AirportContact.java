@@ -2,6 +2,7 @@ package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -47,6 +48,10 @@ public class AirportContact implements Serializable {
     }
     public void setAirport(Airport airport) {
         this.airport = airport;
+    }
+
+    public ZonedDateTime getZonedDateTime() {
+        return this.getLocalDateTime().atZone(this.getAirport().getTimezoneId());
     }
 
     public LocalDateTime getLocalDateTime() {
