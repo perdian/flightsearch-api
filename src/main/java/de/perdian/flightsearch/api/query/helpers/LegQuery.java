@@ -31,6 +31,7 @@ public class LegQuery implements Serializable, Predicate<Leg> {
     private DateTimeQuery departureDateTime = null;
     private DateTimeQuery arrivalDateTime = null;
     private DurationQuery flightDuration = null;
+    private DurationQuery totalDuration = null;
     private DurationQuery transferDuration = null;
 
     @Override
@@ -95,6 +96,8 @@ public class LegQuery implements Serializable, Predicate<Leg> {
         } else if (this.getFlightDuration() != null && !this.getFlightDuration().testAll(LegQuery.collectFlightDurations(leg))) {
             return false;
         } else if (this.getTransferDuration() != null && !this.getTransferDuration().testAll(LegQuery.collectTransferDurations(leg))) {
+            return false;
+        } else if (this.getTotalDuration() != null && !this.getTotalDuration().test(leg.getScheduledDuration())) {
             return false;
         } else {
             return true;
@@ -189,6 +192,13 @@ public class LegQuery implements Serializable, Predicate<Leg> {
     }
     public void setFlightDuration(DurationQuery flightDuration) {
         this.flightDuration = flightDuration;
+    }
+
+    public DurationQuery getTotalDuration() {
+        return this.totalDuration;
+    }
+    public void setTotalDuration(DurationQuery totalDuration) {
+        this.totalDuration = totalDuration;
     }
 
     public DurationQuery getTransferDuration() {
