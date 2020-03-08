@@ -20,7 +20,7 @@ public class Airport implements Serializable {
     private Float longitude = null;
     private ZoneOffset timezoneOffset = null;
     private ZoneId timezoneId = null;
-    private String type = null;
+    private AirportType type = null;
 
     @Override
     public String toString() {
@@ -99,10 +99,10 @@ public class Airport implements Serializable {
         this.timezoneId = timezoneId;
     }
 
-    public String getType() {
+    public AirportType getType() {
         return this.type;
     }
-    void setType(String type) {
+    void setType(AirportType type) {
         this.type = type;
     }
 

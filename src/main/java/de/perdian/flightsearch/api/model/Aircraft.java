@@ -1,6 +1,7 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,6 +14,29 @@ public class Aircraft implements Serializable {
     private String typeDescription = null;
     private String registration = null;
     private String name = null;
+
+    public Aircraft() {
+    }
+
+    public Aircraft(String typeCode) {
+        this.setTypeCode(typeCode);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        } else if (that instanceof Aircraft) {
+            return Objects.equals(this.getTypeCode(), ((Aircraft)that).getTypeCode());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getTypeCode() == null ? 0 : this.getTypeCode().hashCode();
+    }
 
     @Override
     public String toString() {

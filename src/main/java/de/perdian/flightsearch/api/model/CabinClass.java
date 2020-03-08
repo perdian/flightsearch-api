@@ -2,6 +2,9 @@ package de.perdian.flightsearch.api.model;
 
 public enum CabinClass {
 
-    ECONOMY;
+    ECONOMY,
+    PREMIUM_ECONOMY,
+    BUSINESS,
+    FIRST;
 
 }

@@ -1,211 +1,69 @@
 package de.perdian.flightsearch.api.query.helpers;
 
-import java.io.Serializable;
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import de.perdian.flightsearch.api.model.Airport;
 import de.perdian.flightsearch.api.model.Leg;
 
-public class LegQuery implements Serializable, Predicate<Leg> {
+public class LegQuery implements Predicate<Leg> {
 
-    static final long serialVersionUID = 1L;
-
-    private List<String> originAirportCodes = null;
-    private boolean enforceExactOriginAirportCodes = false;
-    private List<String> destinationAirportCodes = null;
-    private boolean enforceExactDestinationAirportCodes = false;
-    private List<String> blacklistedAirportCodes = Arrays.asList("SVO");
-    private DateTimeQuery departureDateTime = null;
-    private DateTimeQuery arrivalDateTime = null;
-    private DurationQuery flightDuration = null;
-    private DurationQuery totalDuration = null;
-    private DurationQuery transferDuration = null;
+    private DurationQuery duration = null;
+    private Collection<String> blacklistedAirportCodes = Arrays.asList("SVO");
 
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-        toStringBuilder.append("originAirportCodes", this.getOriginAirportCodes());
-        toStringBuilder.append("destinationAirportCodes", this.getDestinationAirportCodes());
-        if (this.getDepartureDateTime() != null) {
-            toStringBuilder.append("departureDateTime", this.getDepartureDateTime());
-        }
-        if (this.getArrivalDateTime() != null) {
-            toStringBuilder.append("arrivalDateTime", this.getArrivalDateTime());
-        }
-        if (this.getFlightDuration() != null) {
-            toStringBuilder.append("flightDuration", this.getFlightDuration());
-        }
-        if (this.getTransferDuration() != null) {
-            toStringBuilder.append("transferDuration", this.getTransferDuration());
-        }
-        if (this.getBlacklistedAirportCodes() != null && !this.getBlacklistedAirportCodes().isEmpty()) {
-            toStringBuilder.append("blacklistedAirportCodes", this.getBlacklistedAirportCodes());
-        }
+        toStringBuilder.append("duration", this.getDuration());
+        toStringBuilder.append("blacklistedAirportCodes", this.getBlacklistedAirportCodes());
         return toStringBuilder.toString();
-    }
-
-    public List<LegQuery> flattenMultipleAirportsForDepartureAndArrival() {
-        if (this.getOriginAirportCodes() == null || this.getOriginAirportCodes().isEmpty()) {
-            throw new IllegalArgumentException("No origin airport codes specified!");
-        } else if (this.getDestinationAirportCodes() == null || this.getDestinationAirportCodes().isEmpty()) {
-            throw new IllegalArgumentException("No destination airport codes specified!");
-        } else {
-            List<LegQuery> legQueries = new ArrayList<>(this.getOriginAirportCodes().size() * this.getDestinationAirportCodes().size());
-            for (String originAirportCode : this.getOriginAirportCodes()) {
-                for (String destinationAirportCode : this.getDestinationAirportCodes()) {
-                    LegQuery legQuery = new LegQuery();
-                    legQuery.setArrivalDateTime(this.getArrivalDateTime());
-                    legQuery.setBlacklistedAirportCodes(this.getBlacklistedAirportCodes());
-                    legQuery.setDepartureDateTime(this.getDepartureDateTime());
-                    legQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
-                    legQuery.setFlightDuration(this.getFlightDuration());
-                    legQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
-                    legQuery.setTransferDuration(this.getTransferDuration());
-                    legQueries.add(legQuery);
-                }
-            }
-            return Collections.unmodifiableList(legQueries);
-        }
     }
 
     @Override
     public boolean test(Leg leg) {
-        if (this.isEnforceExactOriginAirportCodes() && this.getOriginAirportCodes() != null && !this.getOriginAirportCodes().isEmpty() && !this.getOriginAirportCodes().contains(leg.getFirstItem().getFlight().getScheduledDeparture().getAirport().getCode())) {
+        if (this.getDuration() != null && !this.getDuration().test(leg.getScheduledRoute().getDuration())) {
             return false;
-        } else if (this.isEnforceExactDestinationAirportCodes() && this.getDestinationAirportCodes() != null && !this.getDestinationAirportCodes().isEmpty() && !this.getDestinationAirportCodes().contains(leg.getLastItem().getFlight().getScheduledArrival().getAirport().getCode())) {
-            return false;
-        } else if (!this.testBlacklistedAirportCodes(LegQuery.collectAirports(leg))) {
-            return false;
-        } else if (this.getDepartureDateTime() != null && !this.getDepartureDateTime().test(leg.getFirstItem().getFlight().getScheduledDeparture().getLocalDateTime())) {
-            return false;
-        } else if (this.getArrivalDateTime() != null && !this.getArrivalDateTime().test(leg.getLastItem().getFlight().getScheduledArrival().getLocalDateTime())) {
-            return false;
-        } else if (this.getFlightDuration() != null && !this.getFlightDuration().testAll(LegQuery.collectFlightDurations(leg))) {
-            return false;
-        } else if (this.getTransferDuration() != null && !this.getTransferDuration().testAll(LegQuery.collectTransferDurations(leg))) {
-            return false;
-        } else if (this.getTotalDuration() != null && !this.getTotalDuration().test(leg.getScheduledDuration())) {
+        } else if (!this.testBlacklistedAirportCodes(leg)) {
             return false;
         } else {
             return true;
         }
     }
 
-    private boolean testBlacklistedAirportCodes(Collection<Airport> airports) {
+    private boolean testBlacklistedAirportCodes(Leg leg) {
         if (this.getBlacklistedAirportCodes() != null && !this.getBlacklistedAirportCodes().isEmpty()) {
-            for (Airport airport : airports) {
-                if (this.getBlacklistedAirportCodes().contains(airport.getCode())) {
+            for (String airportCode : Arrays.asList(leg.getScheduledRoute().getDeparture().getAirport().getCode(), leg.getScheduledRoute().getArrival().getAirport().getCode())) {
+                if (this.getBlacklistedAirportCodes().contains(airportCode)) {
                     return false;
+                }
+            }
+            if (leg.getActualRoute() != null) {
+                for (String airportCode : Arrays.asList(leg.getActualRoute().getDeparture().getAirport().getCode(), leg.getActualRoute().getArrival().getAirport().getCode())) {
+                    if (this.getBlacklistedAirportCodes().contains(airportCode)) {
+                        return false;
+                    }
                 }
             }
         }
         return true;
     }
 
-    private static List<Duration> collectFlightDurations(Leg leg) {
-        return leg.getItems().stream()
-            .map(legItem -> legItem.getFlight().getScheduledDuration())
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+    public DurationQuery getDuration() {
+        return this.duration;
+    }
+    public void setDuration(DurationQuery duration) {
+        this.duration = duration;
     }
 
-    private static List<Duration> collectTransferDurations(Leg leg) {
-        return leg.getItems().stream()
-            .map(legItem -> legItem.getConnection())
-            .filter(Objects::nonNull)
-            .map(connection -> connection.getDuration())
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-    }
-
-    private static Set<Airport> collectAirports(Leg leg) {
-        return leg.getItems().stream()
-            .map(legItem -> legItem.getFlight())
-            .flatMap(flight -> Stream.of(flight.getScheduledDeparture().getAirport(), flight.getScheduledArrival().getAirport()))
-            .collect(Collectors.toSet());
-    }
-
-    public List<String> getOriginAirportCodes() {
-        return this.originAirportCodes;
-    }
-    public void setOriginAirportCodes(List<String> originAirportCodes) {
-        this.originAirportCodes = originAirportCodes;
-    }
-
-    public boolean isEnforceExactDestinationAirportCodes() {
-        return this.enforceExactDestinationAirportCodes;
-    }
-    public void setEnforceExactDestinationAirportCodes(boolean enforceExactDestinationAirportCodes) {
-        this.enforceExactDestinationAirportCodes = enforceExactDestinationAirportCodes;
-    }
-
-    public List<String> getDestinationAirportCodes() {
-        return this.destinationAirportCodes;
-    }
-    public void setDestinationAirportCodes(List<String> destinationAirportCodes) {
-        this.destinationAirportCodes = destinationAirportCodes;
-    }
-
-    public boolean isEnforceExactOriginAirportCodes() {
-        return this.enforceExactOriginAirportCodes;
-    }
-    public void setEnforceExactOriginAirportCodes(boolean enforceExactOriginAirportCodes) {
-        this.enforceExactOriginAirportCodes = enforceExactOriginAirportCodes;
-    }
-
-    public List<String> getBlacklistedAirportCodes() {
+    public Collection<String> getBlacklistedAirportCodes() {
         return this.blacklistedAirportCodes;
     }
-    public void setBlacklistedAirportCodes(List<String> blacklistedAirportCodes) {
+    public void setBlacklistedAirportCodes(Collection<String> blacklistedAirportCodes) {
         this.blacklistedAirportCodes = blacklistedAirportCodes;
     }
 
-    public DateTimeQuery getDepartureDateTime() {
-        return this.departureDateTime;
-    }
-    public void setDepartureDateTime(DateTimeQuery departureDateTime) {
-        this.departureDateTime = departureDateTime;
-    }
-
-    public DateTimeQuery getArrivalDateTime() {
-        return this.arrivalDateTime;
-    }
-    public void setArrivalDateTime(DateTimeQuery arrivalDateTime) {
-        this.arrivalDateTime = arrivalDateTime;
-    }
-
-    public DurationQuery getFlightDuration() {
-        return this.flightDuration;
-    }
-    public void setFlightDuration(DurationQuery flightDuration) {
-        this.flightDuration = flightDuration;
-    }
-
-    public DurationQuery getTotalDuration() {
-        return this.totalDuration;
-    }
-    public void setTotalDuration(DurationQuery totalDuration) {
-        this.totalDuration = totalDuration;
-    }
-
-    public DurationQuery getTransferDuration() {
-        return this.transferDuration;
-    }
-    public void setTransferDuration(DurationQuery transferDuration) {
-        this.transferDuration = transferDuration;
-    }
 
 }

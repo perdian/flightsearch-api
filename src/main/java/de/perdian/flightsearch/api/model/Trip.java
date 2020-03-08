@@ -12,13 +12,13 @@ public class Trip implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private List<Leg> legs = Collections.emptyList();
+    private List<Flight> flights = Collections.emptyList();
 
     public Trip() {
     }
 
-    public Trip(List<Leg> legs) {
-        this.setLegs(legs);
+    public Trip(List<Flight> flights) {
+        this.setFlights(flights);
     }
 
     @Override
@@ -32,11 +32,11 @@ public class Trip implements Serializable {
             return true;
         } else if (that instanceof Trip) {
             Trip thatTrip = (Trip)that;
-            if (this.getLegs().size() != thatTrip.getLegs().size()) {
+            if (this.getFlights().size() != thatTrip.getFlights().size()) {
                 return false;
             } else {
-                for (int i=0; i < this.getLegs().size(); i++) {
-                    if (!this.getLegs().get(i).equals(thatTrip.getLegs().get(i))) {
+                for (int i=0; i < this.getFlights().size(); i++) {
+                    if (!this.getFlights().get(i).equals(thatTrip.getFlights().get(i))) {
                         return false;
                     }
                 }
@@ -50,17 +50,17 @@ public class Trip implements Serializable {
     @Override
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        for (int i=0; i < this.getLegs().size(); i++) {
-            hashCodeBuilder.append(i).append(this.getLegs().get(i));
+        for (int i=0; i < this.getFlights().size(); i++) {
+            hashCodeBuilder.append(i).append(this.getFlights().get(i));
         }
         return hashCodeBuilder.toHashCode();
     }
 
-    public List<Leg> getLegs() {
-        return this.legs;
+    public List<Flight> getFlights() {
+        return this.flights;
     }
-    public void setLegs(List<Leg> legs) {
-        this.legs = legs;
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
 
 }

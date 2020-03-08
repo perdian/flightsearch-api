@@ -15,6 +15,18 @@ public class Carrier implements Serializable {
     private String countryCode = null;
     private String logoUrl = null;
 
+    public Carrier() {
+    }
+
+    public Carrier(String code) {
+        this.setCode(code);
+    }
+
+    public Carrier(String code, String name) {
+        this.setCode(code);
+        this.setName(name);
+    }
+
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);

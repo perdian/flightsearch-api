@@ -15,6 +15,14 @@ public class DurationQuery implements Serializable, Predicate<Duration> {
     private Duration min = null;
     private Duration max = null;
 
+    public DurationQuery() {
+    }
+
+    public DurationQuery(Duration min, Duration max) {
+        this.setMin(min);
+        this.setMax(max);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);

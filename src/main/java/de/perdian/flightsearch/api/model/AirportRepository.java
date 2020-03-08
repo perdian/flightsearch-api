@@ -74,7 +74,7 @@ public class AirportRepository {
                         airport.setLongitude(Float.parseFloat(lineFields.get(7)));
                         airport.setTimezoneOffset(zoneOffset);
                         airport.setTimezoneId(zoneId);
-                        airport.setType(lineFields.get(12));
+                        airport.setType(AirportType.parseValue(lineFields.get(12)));
                         airportsByCode.put(iataCode, airport);
 
                     } catch (Exception e) {

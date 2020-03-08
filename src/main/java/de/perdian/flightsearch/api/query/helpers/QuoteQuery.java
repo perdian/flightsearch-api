@@ -15,6 +15,13 @@ public class QuoteQuery implements Predicate<Quote> {
     private Collection<String> blacklistedProviders = null;
     private Collection<String> whitelistedProviders = null;
 
+    public QuoteQuery() {
+    }
+
+    public QuoteQuery(PriceQuery price) {
+        this.setPrice(price);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);

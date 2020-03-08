@@ -13,6 +13,14 @@ public class PriceQuery implements Predicate<Price> {
     private BigDecimal min = null;
     private BigDecimal max = null;
 
+    public PriceQuery() {
+    }
+
+    public PriceQuery(BigDecimal min, BigDecimal max) {
+        this.setMin(min);
+        this.setMax(max);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);

@@ -16,6 +16,14 @@ public class AirportContact implements Serializable {
     private String terminal = null;
     private String gate = null;
 
+    public AirportContact() {
+    }
+
+    public AirportContact(Airport airport, LocalDateTime localDateTime) {
+        this.setAirport(airport);
+        this.setLocalDateTime(localDateTime);
+    }
+
     @Override
     public String toString() {
         return this.getAirport().getCode() + "@" + this.getLocalDateTime();
