@@ -84,7 +84,7 @@ public class Flight implements Serializable {
         } else {
             NumberFormat numberFormat = new DecimalFormat("00");
             StringBuilder result = new StringBuilder();
-            result.append(this.getTotalScheduledDuration().toMinutes() / 60);
+            result.append(numberFormat.format(this.getTotalScheduledDuration().toMinutes() / 60));
             result.append(":").append(numberFormat.format(this.getTotalScheduledDuration().toMinutes() % 60));
             return result.toString();
         }
