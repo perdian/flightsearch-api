@@ -14,6 +14,14 @@ public class OfferQueryGroup implements Serializable {
     private String title = null;
     private List<OfferQuery> queries = Collections.emptyList();
 
+    public OfferQueryGroup() {
+    }
+
+    public OfferQueryGroup(String title, List<OfferQuery> queries) {
+        this.setTitle(title);
+        this.setQueries(queries);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
