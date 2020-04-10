@@ -10,6 +10,13 @@ public class SegmentQuery implements Predicate<Segment> {
 
     private LegQuery leg = null;
 
+    public SegmentQuery() {
+    }
+
+    public SegmentQuery(LegQuery leg) {
+        this.setLeg(leg);
+    }
+
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);

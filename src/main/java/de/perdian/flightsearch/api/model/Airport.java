@@ -22,6 +22,18 @@ public class Airport implements Serializable {
     private ZoneId timezoneId = null;
     private AirportType type = null;
 
+    public Airport() {
+    }
+
+    public Airport(String code) {
+        this.setCode(code);
+    }
+
+    public Airport(String code, ZoneId timezoneId) {
+        this.setCode(code);
+        this.setTimezoneId(timezoneId);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
@@ -46,63 +58,63 @@ public class Airport implements Serializable {
     public String getCode() {
         return this.code;
     }
-    void setCode(String code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
     public String getName() {
         return this.name;
     }
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     public String getCity() {
         return this.city;
     }
-    void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
     public String getCountryCode() {
         return this.countryCode;
     }
-    void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
 
     public Float getLatitude() {
         return this.latitude;
     }
-    void setLatitude(Float latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
     public Float getLongitude() {
         return this.longitude;
     }
-    void setLongitude(Float longitude) {
+    public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
 
     public ZoneOffset getTimezoneOffset() {
         return this.timezoneOffset;
     }
-    void setTimezoneOffset(ZoneOffset timezoneOffset) {
+    public void setTimezoneOffset(ZoneOffset timezoneOffset) {
         this.timezoneOffset = timezoneOffset;
     }
 
     public ZoneId getTimezoneId() {
         return this.timezoneId;
     }
-    void setTimezoneId(ZoneId timezoneId) {
+    public void setTimezoneId(ZoneId timezoneId) {
         this.timezoneId = timezoneId;
     }
 
     public AirportType getType() {
         return this.type;
     }
-    void setType(AirportType type) {
+    public void setType(AirportType type) {
         this.type = type;
     }
 

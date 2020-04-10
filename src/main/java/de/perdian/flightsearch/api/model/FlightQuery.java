@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FlightQuery implements Serializable, Predicate<Flight> {
+public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
 
     static final long serialVersionUID = 1L;
 
@@ -23,6 +23,15 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
     private DurationQuery totalDuration = null;
     private SegmentQuery segment = null;
     private ConnectionQuery connection = null;
+
+    @Override
+    public FlightQuery clone() {
+        try {
+            return (FlightQuery)super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Cannot clone class: " + this.getClass().getName(), e);
+        }
+    }
 
     @Override
     public String toString() {
@@ -61,16 +70,15 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
             throw new IllegalArgumentException("No origin airport codes specified!");
         } else if (this.getDestinationAirportCodes() == null || this.getDestinationAirportCodes().isEmpty()) {
             throw new IllegalArgumentException("No destination airport codes specified!");
+        } else if (this.getOriginAirportCodes().size() == 1 && this.getDestinationAirportCodes().size() == 1) {
+            return Arrays.asList(this);
         } else {
             List<FlightQuery> flightQueries = new ArrayList<>(this.getOriginAirportCodes().size() * this.getDestinationAirportCodes().size());
             for (String originAirportCode : this.getOriginAirportCodes()) {
                 for (String destinationAirportCode : this.getDestinationAirportCodes()) {
-                    FlightQuery flightQuery = new FlightQuery();
-                    flightQuery.setArrivalDateTime(this.getArrivalDateTime());
-                    flightQuery.setDepartureDateTime(this.getDepartureDateTime());
+                    FlightQuery flightQuery = this.clone();
                     flightQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
                     flightQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
-                    flightQuery.setSegment(this.getSegment());
                     flightQueries.add(flightQuery);
                 }
             }

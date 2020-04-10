@@ -18,7 +18,7 @@ public enum AirportType {
 
     public static AirportType parseValue(String value) {
         for (AirportType airportType : AirportType.values()) {
-            if (airportType.getValues().contains(value)) {
+            if (airportType.getValues().contains(value == null ? null : value.toLowerCase())) {
                 return airportType;
             }
         }

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class LegQuery implements Predicate<Leg> {
 
     private DurationQuery duration = null;
-    private Collection<String> blacklistedAirportCodes = Arrays.asList("SVO");
+    private Collection<String> blacklistedAirportCodes = null;
 
     @Override
     public String toString() {

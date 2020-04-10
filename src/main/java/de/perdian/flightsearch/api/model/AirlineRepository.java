@@ -55,7 +55,7 @@ public class AirlineRepository {
                         airline.setCode(lineFields.get(3));
                         airline.setCallsign(lineFields.get(5));
                         airline.setCountryCode(lineFields.get(6));
-                        airlinesByCode.put(lineFields.get(3), airline);
+                        airlinesByCode.putIfAbsent(lineFields.get(3), airline);
                     } catch (Exception e) {
                         log.warn("Invalid airline line: {}", airlineLine, e);
                     }

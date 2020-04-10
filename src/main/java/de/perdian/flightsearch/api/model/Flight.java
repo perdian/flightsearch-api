@@ -1,8 +1,6 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -79,17 +77,6 @@ public class Flight implements Serializable {
         ZonedDateTime firstItemDeparture = this.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture().getZonedDateTime();
         ZonedDateTime lastItemArrival = this.getLastSegment().getLastLeg().getScheduledRoute().getArrival().getZonedDateTime();
         return Duration.between(firstItemDeparture, lastItemArrival);
-    }
-    public String getTotalScheduledDurationFormatted() {
-        if (this.getTotalScheduledDuration() == null) {
-            return null;
-        } else {
-            NumberFormat numberFormat = new DecimalFormat("00");
-            StringBuilder result = new StringBuilder();
-            result.append(numberFormat.format(this.getTotalScheduledDuration().toMinutes() / 60));
-            result.append(":").append(numberFormat.format(this.getTotalScheduledDuration().toMinutes() % 60));
-            return result.toString();
-        }
     }
 
     public Segment getFirstSegment() {

@@ -18,6 +18,13 @@ public class Segment implements Serializable {
     private List<FlightNumber> codeshareFlightNumbers = null;
     private List<Leg> legs = Collections.emptyList();
 
+    public Segment() {
+    }
+
+    public Segment(List<Leg> legs) {
+        this.setLegs(legs);
+    }
+
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);

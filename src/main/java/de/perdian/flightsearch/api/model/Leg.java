@@ -15,6 +15,14 @@ public class Leg implements Serializable {
     private Route actualRoute = null;
     private Aircraft aircraft = null;
 
+    public Leg() {
+    }
+
+    public Leg(Route scheduledRoute, Route actualRoute) {
+        this.setScheduledRoute(scheduledRoute);
+        this.setActualRoute(actualRoute);
+    }
+
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);

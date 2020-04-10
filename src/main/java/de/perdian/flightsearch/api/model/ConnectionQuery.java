@@ -2,7 +2,6 @@ package de.perdian.flightsearch.api.model;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -25,7 +24,7 @@ public class ConnectionQuery implements Predicate<Connection> {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    public boolean testAll(List<Connection> connections) {
+    public boolean testAll(Collection<Connection> connections) {
         for (Connection connection : connections) {
             if (!this.test(connection)) {
                 return false;

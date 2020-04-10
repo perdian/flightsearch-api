@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class AirlineTest {
 
     @Test
-    public void constructor() {
+    public void testConstructor() {
         Airline airline = new Airline("AB");
         Assertions.assertEquals("AB", airline.getCode());
     }

@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class FlightNumber implements Serializable {
 
     private static final Pattern PATTERN = Pattern.compile("([A-Za-z0-9]{2})([0-9]{1,4})([A-Za-z]*)");
@@ -28,7 +30,7 @@ public class FlightNumber implements Serializable {
             }
             this.setAirline(airline);
             this.setFlightNumber(Integer.parseInt(matcher.group(2), 10));
-            this.setPostfix(matcher.group(3).toUpperCase());
+            this.setPostfix(StringUtils.defaultIfEmpty(matcher.group(3).toUpperCase(), null));
         } else {
             throw new IllegalArgumentException("Invalid flight number: " + flightNumber);
         }
