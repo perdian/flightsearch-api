@@ -1,4 +1,4 @@
-package de.perdian.flightsearch.api.query.helpers;
+package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,10 +9,6 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.Connection;
-import de.perdian.flightsearch.api.model.Flight;
-import de.perdian.flightsearch.api.model.Leg;
 
 public class FlightQuery implements Serializable, Predicate<Flight> {
 
@@ -25,7 +21,7 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
     private DateTimeQuery departureDateTime = null;
     private DateTimeQuery arrivalDateTime = null;
     private DurationQuery totalDuration = null;
-    private LegQuery leg = null;
+    private SegmentQuery segment = null;
     private ConnectionQuery connection = null;
 
     @Override
@@ -35,8 +31,29 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
         toStringBuilder.append("destinationAirportCodes", this.getDestinationAirportCodes());
         toStringBuilder.append("departureDateTime", this.getDepartureDateTime());
         toStringBuilder.append("arrivalDateTime", this.getArrivalDateTime());
-        toStringBuilder.append("leg", this.getLeg());
+        toStringBuilder.append("segment", this.getSegment());
         return toStringBuilder.toString();
+    }
+
+    @Override
+    public boolean test(Flight flight) {
+        if (this.getDepartureDateTime() != null && !this.getDepartureDateTime().test(flight.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture().getLocalDateTime())) {
+            return false;
+        } else if (this.getArrivalDateTime() != null && !this.getArrivalDateTime().test(flight.getLastSegment().getLastLeg().getScheduledRoute().getArrival().getLocalDateTime())) {
+            return false;
+        } else if (this.getTotalDuration() != null && !this.getTotalDuration().test(flight.getTotalScheduledDuration())) {
+            return false;
+        } else if (this.isEnforceExactOriginAirportCodes() && this.getOriginAirportCodes() != null && !this.getOriginAirportCodes().isEmpty() && !this.getOriginAirportCodes().contains(flight.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture().getAirport().getCode())) {
+            return false;
+        } else if (this.isEnforceExactDestinationAirportCodes() && this.getDestinationAirportCodes() != null && !this.getDestinationAirportCodes().isEmpty() && !this.getDestinationAirportCodes().contains(flight.getLastSegment().getLastLeg().getScheduledRoute().getArrival().getAirport().getCode())) {
+            return false;
+        } else if (this.getSegment() != null && !this.getSegment().testAll(flight.getSegments())) {
+            return false;
+        } else if (this.getConnection() != null && !this.getConnection().testAll(flight.computeScheduledConnections())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public List<FlightQuery> flattenMultipleAirportsForDepartureAndArrival() {
@@ -53,55 +70,12 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
                     flightQuery.setDepartureDateTime(this.getDepartureDateTime());
                     flightQuery.setDestinationAirportCodes(Arrays.asList(destinationAirportCode));
                     flightQuery.setOriginAirportCodes(Arrays.asList(originAirportCode));
-                    flightQuery.setLeg(this.getLeg());
+                    flightQuery.setSegment(this.getSegment());
                     flightQueries.add(flightQuery);
                 }
             }
             return Collections.unmodifiableList(flightQueries);
         }
-    }
-
-    @Override
-    public boolean test(Flight flight) {
-        if (this.getDepartureDateTime() != null && !this.getDepartureDateTime().test(flight.getFirstLeg().getScheduledRoute().getDeparture().getLocalDateTime())) {
-            return false;
-        } else if (this.getArrivalDateTime() != null && !this.getArrivalDateTime().test(flight.getLastLeg().getScheduledRoute().getArrival().getLocalDateTime())) {
-            return false;
-        } else if (this.getTotalDuration() != null && !this.getTotalDuration().test(flight.getTotalScheduledDuration())) {
-            return false;
-        } else if (this.isEnforceExactOriginAirportCodes() && this.getOriginAirportCodes() != null && !this.getOriginAirportCodes().isEmpty() && !this.getOriginAirportCodes().contains(flight.getFirstLeg().getScheduledRoute().getDeparture().getAirport().getCode())) {
-            return false;
-        } else if (this.isEnforceExactDestinationAirportCodes() && this.getDestinationAirportCodes() != null && !this.getDestinationAirportCodes().isEmpty() && !this.getDestinationAirportCodes().contains(flight.getLastLeg().getScheduledRoute().getArrival().getAirport().getCode())) {
-            return false;
-        } else if (!this.testLegs(flight)) {
-            return false;
-        } else if (!this.testConnections(flight)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean testLegs(Flight flight) {
-        if (this.getLeg() != null) {
-            for (Leg leg : flight.getLegs()) {
-                if (!this.getLeg().test(leg)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean testConnections(Flight flight) {
-        if (this.getConnection() != null) {
-            for (Connection connection : flight.computeScheduledConnections()) {
-                if (!this.getConnection().test(connection)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public List<String> getOriginAirportCodes() {
@@ -132,11 +106,11 @@ public class FlightQuery implements Serializable, Predicate<Flight> {
         this.enforceExactOriginAirportCodes = enforceExactOriginAirportCodes;
     }
 
-    public LegQuery getLeg() {
-        return this.leg;
+    public SegmentQuery getSegment() {
+        return this.segment;
     }
-    public void setLeg(LegQuery leg) {
-        this.leg = leg;
+    public void setSegment(SegmentQuery segment) {
+        this.segment = segment;
     }
 
     public DateTimeQuery getDepartureDateTime() {

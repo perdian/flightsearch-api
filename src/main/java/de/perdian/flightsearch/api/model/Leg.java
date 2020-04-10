@@ -1,7 +1,6 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -14,20 +13,14 @@ public class Leg implements Serializable {
 
     private Route scheduledRoute = null;
     private Route actualRoute = null;
-    private Carrier operatingCarrier = null;
-    private FlightNumber operatingFlightNumber = null;
-    private FlightNumber marketingFlightNumber = null;
-    private List<FlightNumber> codeshareFlightNumbers = null;
     private Aircraft aircraft = null;
 
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-        toStringBuilder.append("operatingFlightNumber", this.getOperatingFlightNumber());
-        toStringBuilder.append("operatingCarrier", this.getOperatingCarrier());
-        toStringBuilder.append("marketingFlightNumber", this.getMarketingFlightNumber());
         toStringBuilder.append("scheduledRoute", this.getScheduledRoute());
         toStringBuilder.append("actualRoute", this.getActualRoute());
+        toStringBuilder.append("aircraft", this.getAircraft());
         return toStringBuilder.toString();
     }
 
@@ -65,34 +58,6 @@ public class Leg implements Serializable {
     }
     public void setActualRoute(Route actualRoute) {
         this.actualRoute = actualRoute;
-    }
-
-    public Carrier getOperatingCarrier() {
-        return this.operatingCarrier;
-    }
-    public void setOperatingCarrier(Carrier operatingCarrier) {
-        this.operatingCarrier = operatingCarrier;
-    }
-
-    public FlightNumber getOperatingFlightNumber() {
-        return this.operatingFlightNumber;
-    }
-    public void setOperatingFlightNumber(FlightNumber operatingFlightNumber) {
-        this.operatingFlightNumber = operatingFlightNumber;
-    }
-
-    public FlightNumber getMarketingFlightNumber() {
-        return this.marketingFlightNumber;
-    }
-    public void setMarketingFlightNumber(FlightNumber marketingFlightNumber) {
-        this.marketingFlightNumber = marketingFlightNumber;
-    }
-
-    public List<FlightNumber> getCodeshareFlightNumbers() {
-        return this.codeshareFlightNumbers;
-    }
-    public void setCodeshareFlightNumbers(List<FlightNumber> codeshareFlightNumbers) {
-        this.codeshareFlightNumbers = codeshareFlightNumbers;
     }
 
     public Aircraft getAircraft() {

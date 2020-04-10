@@ -1,13 +1,9 @@
-package de.perdian.flightsearch.api.query;
+package de.perdian.flightsearch.api.model;
 
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.Offer;
-import de.perdian.flightsearch.api.query.helpers.QuoteQuery;
-import de.perdian.flightsearch.api.query.helpers.TripQuery;
 
 public class OfferQuery implements Predicate<Offer> {
 

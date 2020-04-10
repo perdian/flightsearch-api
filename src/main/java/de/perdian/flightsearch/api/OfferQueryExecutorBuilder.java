@@ -1,4 +1,4 @@
-package de.perdian.flightsearch.api.query;
+package de.perdian.flightsearch.api;
 
 import java.util.ArrayList;
 import java.util.Collection;

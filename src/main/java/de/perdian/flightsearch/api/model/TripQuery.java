@@ -1,4 +1,4 @@
-package de.perdian.flightsearch.api.query.helpers;
+package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,9 +10,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.CabinClass;
-import de.perdian.flightsearch.api.model.Trip;
 
 public class TripQuery implements Predicate<Trip>, Serializable {
 

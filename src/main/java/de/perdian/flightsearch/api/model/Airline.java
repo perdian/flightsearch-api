@@ -6,25 +6,22 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Carrier implements Serializable {
+public class Airline implements Serializable {
 
     static final long serialVersionUID = 1L;
 
     private String code = null;
     private String name = null;
+    private String alias = null;
+    private String callsign = null;
     private String countryCode = null;
     private String logoUrl = null;
 
-    public Carrier() {
+    public Airline() {
     }
 
-    public Carrier(String code) {
+    public Airline(String code) {
         this.setCode(code);
-    }
-
-    public Carrier(String code, String name) {
-        this.setCode(code);
-        this.setName(name);
     }
 
     @Override
@@ -39,8 +36,8 @@ public class Carrier implements Serializable {
     public boolean equals(Object that) {
         if (this == that) {
             return true;
-        } else if (that instanceof Carrier) {
-            return Objects.equals(this.getCode(), ((Carrier)that).getCode());
+        } else if (that instanceof Airline) {
+            return Objects.equals(this.getCode(), ((Airline)that).getCode());
         } else {
             return false;
         }
@@ -63,6 +60,20 @@ public class Carrier implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getCallsign() {
+        return this.callsign;
+    }
+    public void setCallsign(String callsign) {
+        this.callsign = callsign;
     }
 
     public String getCountryCode() {

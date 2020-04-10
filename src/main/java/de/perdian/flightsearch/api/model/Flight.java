@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,13 +18,13 @@ public class Flight implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private List<Leg> legs = Collections.emptyList();
+    private List<Segment> segments = Collections.emptyList();
 
     public Flight() {
     }
 
-    public Flight(List<Leg> legs) {
-        this.setLegs(legs);
+    public Flight(List<Segment> segments) {
+        this.setSegments(segments);
     }
 
     @Override
@@ -37,11 +38,11 @@ public class Flight implements Serializable {
             return true;
         } else if (that instanceof Flight) {
             Flight thatFlight = (Flight)that;
-            if (this.getLegs().size() != thatFlight.getLegs().size()) {
+            if (this.getSegments().size() != thatFlight.getSegments().size()) {
                 return false;
             } else {
-                for (int i=0; i < this.getLegs().size(); i++) {
-                    if (!this.getLegs().get(i).equals(thatFlight.getLegs().get(i))) {
+                for (int i=0; i < this.getSegments().size(); i++) {
+                    if (!this.getSegments().get(i).equals(thatFlight.getSegments().get(i))) {
                         return false;
                     }
                 }
@@ -55,27 +56,28 @@ public class Flight implements Serializable {
     @Override
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        for (int i=0; i < this.getLegs().size(); i++) {
-            hashCodeBuilder.append(i).append(this.getLegs().get(i));
+        for (int i=0; i < this.getSegments().size(); i++) {
+            hashCodeBuilder.append(i).append(this.getSegments().get(i));
         }
         return hashCodeBuilder.toHashCode();
     }
 
     public List<Connection> computeScheduledConnections() {
-        if (this.getLegs().isEmpty()) {
+        List<Leg> flattenedLegs = this.getSegments().stream().flatMap(segment -> segment.getLegs().stream()).collect(Collectors.toList());
+        if (flattenedLegs.isEmpty()) {
             return Collections.emptyList();
         } else {
-            List<Connection> connections = new ArrayList<>(this.getLegs().size() - 1);
-            for (int i=1; i < this.getLegs().size(); i++) {
-                connections.add(new Connection(this.getLegs().get(i-1).getScheduledRoute().getArrival(), this.getLegs().get(i).getScheduledRoute().getDeparture()));
+            List<Connection> connections = new ArrayList<>(flattenedLegs.size() - 1);
+            for (int i=1; i < flattenedLegs.size(); i++) {
+                connections.add(new Connection(flattenedLegs.get(i-1).getScheduledRoute().getArrival(), flattenedLegs.get(i).getScheduledRoute().getDeparture()));
             }
             return Collections.unmodifiableList(connections);
         }
     }
 
     public Duration getTotalScheduledDuration() {
-        ZonedDateTime firstItemDeparture = this.getFirstLeg().getScheduledRoute().getDeparture().getZonedDateTime();
-        ZonedDateTime lastItemArrival = this.getLastLeg().getScheduledRoute().getArrival().getZonedDateTime();
+        ZonedDateTime firstItemDeparture = this.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture().getZonedDateTime();
+        ZonedDateTime lastItemArrival = this.getLastSegment().getLastLeg().getScheduledRoute().getArrival().getZonedDateTime();
         return Duration.between(firstItemDeparture, lastItemArrival);
     }
     public String getTotalScheduledDurationFormatted() {
@@ -90,17 +92,17 @@ public class Flight implements Serializable {
         }
     }
 
-    public Leg getFirstLeg() {
-        return this.getLegs().isEmpty() ? null : this.getLegs().get(0);
+    public Segment getFirstSegment() {
+        return this.getSegments().isEmpty() ? null : this.getSegments().get(0);
     }
-    public Leg getLastLeg() {
-        return this.getLegs().isEmpty() ? null : this.getLegs().get(this.getLegs().size() - 1);
+    public Segment getLastSegment() {
+        return this.getSegments().isEmpty() ? null : this.getSegments().get(this.getSegments().size() - 1);
     }
-    public List<Leg> getLegs() {
-        return this.legs;
+    public List<Segment> getSegments() {
+        return this.segments;
     }
-    public void setLegs(List<Leg> legs) {
-        this.legs = legs;
+    public void setSegments(List<Segment> segments) {
+        this.segments = segments;
     }
 
 }

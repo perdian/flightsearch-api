@@ -1,13 +1,12 @@
-package de.perdian.flightsearch.api.query.helpers;
+package de.perdian.flightsearch.api.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.Connection;
 
 public class ConnectionQuery implements Predicate<Connection> {
 
@@ -24,6 +23,15 @@ public class ConnectionQuery implements Predicate<Connection> {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+    }
+
+    public boolean testAll(List<Connection> connections) {
+        for (Connection connection : connections) {
+            if (!this.test(connection)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.perdian.flightsearch.api.query.helpers;
+package de.perdian.flightsearch.api.model;
 
 import java.util.Collection;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.Quote;
 
 public class QuoteQuery implements Predicate<Quote> {
 

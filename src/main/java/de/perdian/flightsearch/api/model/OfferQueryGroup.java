@@ -1,4 +1,4 @@
-package de.perdian.flightsearch.api.query;
+package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
 import java.util.Collections;

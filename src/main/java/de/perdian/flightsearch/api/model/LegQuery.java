@@ -1,13 +1,12 @@
-package de.perdian.flightsearch.api.query.helpers;
+package de.perdian.flightsearch.api.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import de.perdian.flightsearch.api.model.Leg;
 
 public class LegQuery implements Predicate<Leg> {
 
@@ -20,6 +19,15 @@ public class LegQuery implements Predicate<Leg> {
         toStringBuilder.append("duration", this.getDuration());
         toStringBuilder.append("blacklistedAirportCodes", this.getBlacklistedAirportCodes());
         return toStringBuilder.toString();
+    }
+
+    public boolean testAll(List<Leg> legs) {
+        for (Leg leg : legs) {
+            if (!this.test(leg)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -64,6 +72,5 @@ public class LegQuery implements Predicate<Leg> {
     public void setBlacklistedAirportCodes(Collection<String> blacklistedAirportCodes) {
         this.blacklistedAirportCodes = blacklistedAirportCodes;
     }
-
 
 }
