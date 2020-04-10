@@ -49,12 +49,13 @@ public class AirlineRepository {
                 for (String airlineLine = airlinesReader.readLine(); airlineLine != null; airlineLine = airlinesReader.readLine()) {
                     try {
                         List<String> lineFields = AirlineRepository.tokenizeLine(airlineLine);
+                        String alias = lineFields.get(2);
                         Airline airline = new Airline();
                         airline.setName(lineFields.get(1));
-                        airline.setAlias(lineFields.get(2));
+                        airline.setAlias("\\N".equalsIgnoreCase(alias) ? null : alias);
                         airline.setCode(lineFields.get(3));
                         airline.setCallsign(lineFields.get(5));
-                        airline.setCountryCode(lineFields.get(6));
+                        airline.setCountryCode(countryCodesByTitle.get(lineFields.get(6)));
                         airlinesByCode.putIfAbsent(lineFields.get(3), airline);
                     } catch (Exception e) {
                         log.warn("Invalid airline line: {}", airlineLine, e);
