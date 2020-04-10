@@ -12,6 +12,7 @@ public class AircraftTest {
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testEquals() {
         Assertions.assertEquals(new Aircraft("A320"), new Aircraft("A320"));
         Assertions.assertNotEquals(new Aircraft("A320"), new Aircraft("A321"));

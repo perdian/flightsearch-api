@@ -22,6 +22,7 @@ public class AirportTest {
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testEquals() {
         Assertions.assertEquals(new Airport("CGN"), new Airport("CGN"));
         Assertions.assertNotEquals(new Airport("CGN"), new Airport("FRA"));

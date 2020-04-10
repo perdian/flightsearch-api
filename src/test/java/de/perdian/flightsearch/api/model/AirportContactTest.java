@@ -15,6 +15,7 @@ public class AirportContactTest {
     }
 
     @Test
+    @SuppressWarnings("unlikely-arg-type")
     public void testEquals() {
         AirportContact c1a = new AirportContact(new Airport("CGN"), LocalDateTime.of(2020, 1, 2, 3, 4));
         AirportContact c1b = new AirportContact(new Airport("CGN"), LocalDateTime.of(2020, 1, 2, 3, 4));
