@@ -10,10 +10,19 @@ import org.junit.jupiter.api.Test;
 public class AirportContactQueryTest {
 
     @Test
-    public void testConstructor() {
+    public void testConstructorSmall() {
         AirportContactQuery airportContactQuery = new AirportContactQuery(Arrays.asList("CGN", "DUS"), true);
         Assertions.assertEquals(Arrays.asList("CGN", "DUS"), airportContactQuery.getAirportCodes());
         Assertions.assertTrue(airportContactQuery.isEnforceExactAirportCodes());
+    }
+
+    @Test
+    public void testConstructorFull() {
+        DateTimeQuery dateTimeQuery = new DateTimeQuery();
+        AirportContactQuery airportContactQuery = new AirportContactQuery(Arrays.asList("CGN", "DUS"), true, dateTimeQuery);
+        Assertions.assertEquals(Arrays.asList("CGN", "DUS"), airportContactQuery.getAirportCodes());
+        Assertions.assertTrue(airportContactQuery.isEnforceExactAirportCodes());
+        Assertions.assertEquals(dateTimeQuery, airportContactQuery.getDateTime());
     }
 
     @Test

@@ -20,8 +20,13 @@ public class AirportContactQuery implements Serializable, Cloneable, Predicate<A
     }
 
     public AirportContactQuery(List<String> aiportCodes, boolean enforceExactAirportCodes) {
+        this(aiportCodes, enforceExactAirportCodes, null);
+    }
+
+    public AirportContactQuery(List<String> aiportCodes, boolean enforceExactAirportCodes, DateTimeQuery dateTime) {
         this.setAirportCodes(aiportCodes);
         this.setEnforceExactAirportCodes(enforceExactAirportCodes);
+        this.setDateTime(dateTime);
     }
 
     @Override

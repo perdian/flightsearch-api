@@ -10,7 +10,7 @@ public class Aircraft implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private String typeCode = null;
+    private AircraftType type = null;
     private String typeDescription = null;
     private String registration = null;
     private String name = null;
@@ -18,8 +18,8 @@ public class Aircraft implements Serializable {
     public Aircraft() {
     }
 
-    public Aircraft(String typeCode) {
-        this.setTypeCode(typeCode);
+    public Aircraft(AircraftType type) {
+        this.setType(type);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Aircraft implements Serializable {
         if (this == that) {
             return true;
         } else if (that instanceof Aircraft) {
-            return Objects.equals(this.getTypeCode(), ((Aircraft)that).getTypeCode());
+            return Objects.equals(this.getType(), ((Aircraft)that).getType());
         } else {
             return false;
         }
@@ -35,7 +35,7 @@ public class Aircraft implements Serializable {
 
     @Override
     public int hashCode() {
-        return this.getTypeCode() == null ? 0 : this.getTypeCode().hashCode();
+        return this.getType() == null ? 0 : this.getType().hashCode();
     }
 
     @Override
@@ -43,11 +43,11 @@ public class Aircraft implements Serializable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    public String getTypeCode() {
-        return this.typeCode;
+    public AircraftType getType() {
+        return this.type;
     }
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
+    public void setType(AircraftType type) {
+        this.type = type;
     }
 
     public String getTypeDescription() {

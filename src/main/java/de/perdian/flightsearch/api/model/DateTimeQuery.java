@@ -42,11 +42,11 @@ public class DateTimeQuery implements Serializable, Predicate<LocalDateTime> {
 
     @Override
     public boolean test(LocalDateTime reference) {
-        if (this.getDate() != null && !this.getDate().equals(reference.toLocalDate())) {
+        if (this.getDate() != null && (reference == null || !this.getDate().equals(reference.toLocalDate()))) {
             return false;
-        } else if (this.getMinTime() != null && this.getMinTime().isAfter(reference.toLocalTime())) {
+        } else if (this.getMinTime() != null && (reference == null || this.getMinTime().isAfter(reference.toLocalTime()))) {
             return false;
-        } else if (this.getMaxTime() != null && this.getMaxTime().isBefore(reference.toLocalTime())) {
+        } else if (this.getMaxTime() != null && (reference == null || this.getMaxTime().isBefore(reference.toLocalTime()))) {
             return false;
         } else {
             return true;

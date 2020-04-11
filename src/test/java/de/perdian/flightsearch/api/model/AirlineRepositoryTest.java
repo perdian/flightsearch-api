@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class AirlineRepositoryTest {
 
     @Test
-    public void test() {
+    public void testLoadAirlineByCode() {
         Airline airline = AirlineRepository.getInstance().loadAirlineByCode("LH");
         Assertions.assertEquals("LH", airline.getCode());
         Assertions.assertEquals("Lufthansa", airline.getName());
