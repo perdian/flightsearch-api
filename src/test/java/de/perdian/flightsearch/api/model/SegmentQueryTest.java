@@ -48,6 +48,89 @@ public class SegmentQueryTest {
     }
 
     @Test
+    public void testTestWithOperatingFlightNumber() {
+        Segment matchingSegment = new Segment();
+        matchingSegment.setOperatingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Segment otherSegment = new Segment();
+        otherSegment.setOperatingFlightNumber(new FlightNumber(new Airline("UA"), 456, null));
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setOperatingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithMarketingFlightNumber() {
+        Segment matchingSegment = new Segment();
+        matchingSegment.setMarketingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Segment otherSegment = new Segment();
+        otherSegment.setMarketingFlightNumber(new FlightNumber(new Airline("UA"), 456, null));
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setMarketingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithFlightNumberCodeshareFlightNumber() {
+        Segment matchingSegment = new Segment();
+        matchingSegment.setCodeshareFlightNumbers(Arrays.asList(new FlightNumber(new Airline("LH"), 123, null)));
+        Segment otherSegment = new Segment();
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithFlightNumberMarketingFlightNumber() {
+        Segment matchingSegment = new Segment();
+        matchingSegment.setMarketingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Segment otherSegment = new Segment();
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithFlightNumberOperatingFlightNumber() {
+        Segment matchingSegment = new Segment();
+        matchingSegment.setOperatingFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Segment otherSegment = new Segment();
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setFlightNumber(new FlightNumber(new Airline("LH"), 123, null));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithOriginAirportContact() {
+        AirportContact machtchingLeg1Departure = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
+        AirportContact machtchingLeg1Arrival = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Departure, machtchingLeg1Arrival), null);
+        Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
+        Segment otherSegment = new Segment();
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
+    public void testTestWithDestinationAirportContact() {
+        AirportContact machtchingLeg1Departure = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
+        AirportContact machtchingLeg1Arrival = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Departure, machtchingLeg1Arrival), null);
+        Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
+        Segment otherSegment = new Segment();
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("FRA"), false));
+        Assertions.assertTrue(segmentQuery.test(matchingSegment));
+        Assertions.assertFalse(segmentQuery.test(otherSegment));
+    }
+
+    @Test
     public void testAll() {
         AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
         AirportContact ac2a = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));

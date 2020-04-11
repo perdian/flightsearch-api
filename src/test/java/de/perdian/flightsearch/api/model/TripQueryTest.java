@@ -25,11 +25,9 @@ public class TripQueryTest {
     @Test
     public void testTestWithFlightQueries() {
         FlightQuery flightQuery1 = new FlightQuery();
-        flightQuery1.setEnforceExactOriginAirportCodes(true);
-        flightQuery1.setOriginAirportCodes(Arrays.asList("DUS"));
+        flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("DUS"), true));
         FlightQuery flightQuery2 = new FlightQuery();
-        flightQuery2.setEnforceExactOriginAirportCodes(true);
-        flightQuery2.setOriginAirportCodes(Arrays.asList("FRA"));
+        flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("FRA"), true));
 
         AirportContact departureContact1 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 2, 14, 00));
         AirportContact arrivalContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
@@ -58,47 +56,48 @@ public class TripQueryTest {
     @Test
     public void testFlattenMultipleAirportsForDepartureAndArrival() {
         FlightQuery flightQuery1 = new FlightQuery();
-        flightQuery1.setOriginAirportCodes(Arrays.asList("CGN", "DUS"));
-        flightQuery1.setDestinationAirportCodes(Arrays.asList("JFK", "EWR"));
+        flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN", "DUS"), false));
+        flightQuery1.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK", "EWR"), false));
         FlightQuery flightQuery2 = new FlightQuery();
-        flightQuery2.setOriginAirportCodes(Arrays.asList("MCO"));
-        flightQuery2.setDestinationAirportCodes(Arrays.asList("FRA", "MGL"));
+        flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("MCO"), false));
+        flightQuery2.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("FRA", "MGL"), false));
         TripQuery tripQuery = new TripQuery();
         tripQuery.setFlights(Arrays.asList(flightQuery1, flightQuery2));
 
         List<TripQuery> flattenedTripQueries = tripQuery.flattenMultipleAirportsForDepartureAndArrival();
         Assertions.assertEquals(8, flattenedTripQueries.size());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(0).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(0).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(0).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(0).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(1).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(1).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(1).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(1).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(2).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(2).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(2).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(2).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(3).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(3).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(3).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(3).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(4).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(4).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(4).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(4).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(5).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(5).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(5).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(5).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(6).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(6).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(6).getFlights().get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(6).getFlights().get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(7).getFlights().get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(7).getFlights().get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(7).getFlights().get(1).getOriginAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(0).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(0).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(0).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(0).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(1).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(1).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(1).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(1).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(2).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(2).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(2).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(2).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(3).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(3).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(3).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(3).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(4).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(4).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(4).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(4).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(5).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(5).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(5).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(5).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(6).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(6).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(6).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("FRA"), flattenedTripQueries.get(6).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedTripQueries.get(7).getFlights().get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedTripQueries.get(7).getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MCO"), flattenedTripQueries.get(7).getFlights().get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("MGL"), flattenedTripQueries.get(7).getFlights().get(1).getDestinationAirportContact().getAirportCodes());
     }
 
     @Test
@@ -117,11 +116,11 @@ public class TripQueryTest {
     @Test
     public void testGetTripTypeExpectRoundtrip() {
         FlightQuery flightQuery1 = new FlightQuery();
-        flightQuery1.setOriginAirportCodes(Arrays.asList("CGN"));
-        flightQuery1.setDestinationAirportCodes(Arrays.asList("JFK"));
+        flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
+        flightQuery1.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
         FlightQuery flightQuery2 = new FlightQuery();
-        flightQuery2.setOriginAirportCodes(Arrays.asList("JFK"));
-        flightQuery2.setDestinationAirportCodes(Arrays.asList("CGN"));
+        flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
+        flightQuery2.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
         TripQuery tripQuery = new TripQuery();
         tripQuery.setFlights(Arrays.asList(flightQuery1, flightQuery2));
         Assertions.assertEquals(TripType.ROUNDTRIP, tripQuery.getTripType());
@@ -130,11 +129,11 @@ public class TripQueryTest {
     @Test
     public void testGetTripTypeExpectMultilocationBecauseDifferentReturnStart() {
         FlightQuery flightQuery1 = new FlightQuery();
-        flightQuery1.setOriginAirportCodes(Arrays.asList("CGN"));
-        flightQuery1.setDestinationAirportCodes(Arrays.asList("JFK"));
+        flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
+        flightQuery1.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
         FlightQuery flightQuery2 = new FlightQuery();
-        flightQuery2.setOriginAirportCodes(Arrays.asList("EWR"));
-        flightQuery2.setDestinationAirportCodes(Arrays.asList("CGN"));
+        flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("EWR"), false));
+        flightQuery2.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
         TripQuery tripQuery = new TripQuery();
         tripQuery.setFlights(Arrays.asList(flightQuery1, flightQuery2));
         Assertions.assertEquals(TripType.MULTILOCATIONTRIP, tripQuery.getTripType());
@@ -143,11 +142,11 @@ public class TripQueryTest {
     @Test
     public void testGetTripTypeExpectMultilocationBecauseDifferentReturnEnd() {
         FlightQuery flightQuery1 = new FlightQuery();
-        flightQuery1.setOriginAirportCodes(Arrays.asList("CGN"));
-        flightQuery1.setDestinationAirportCodes(Arrays.asList("JFK"));
+        flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
+        flightQuery1.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
         FlightQuery flightQuery2 = new FlightQuery();
-        flightQuery2.setOriginAirportCodes(Arrays.asList("JFK"));
-        flightQuery2.setDestinationAirportCodes(Arrays.asList("DUS"));
+        flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
+        flightQuery2.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("DUS"), false));
         TripQuery tripQuery = new TripQuery();
         tripQuery.setFlights(Arrays.asList(flightQuery1, flightQuery2));
         Assertions.assertEquals(TripType.MULTILOCATIONTRIP, tripQuery.getTripType());

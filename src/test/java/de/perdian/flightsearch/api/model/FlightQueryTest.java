@@ -19,16 +19,38 @@ public class FlightQueryTest {
     }
 
     @Test
-    public void testTestWithArrivalDateTime() {
+    public void testTestWithDestinationAirportContact() {
+        AirportContactQuery airportContactQuery = new AirportContactQuery();
+        airportContactQuery.setDateTime(new DateTimeQuery(LocalDate.of(2000, 1, 3)));
         FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setArrivalDateTime(new DateTimeQuery(LocalDate.of(2000, 1, 3)));
+        flightQuery.setDestinationAirportContact(airportContactQuery);
         Assertions.assertTrue(flightQuery.test(this.createFlight()));
     }
 
     @Test
-    public void testTestWithArrivalDateTimeFailed() {
+    public void testTestWithDestinationAirportContactFailed() {
+        AirportContactQuery airportContactQuery = new AirportContactQuery();
+        airportContactQuery.setDateTime(new DateTimeQuery(LocalDate.of(2000, 5, 2)));
         FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setArrivalDateTime(new DateTimeQuery(LocalDate.of(2000, 5, 2)));
+        flightQuery.setDestinationAirportContact(airportContactQuery);
+        Assertions.assertFalse(flightQuery.test(this.createFlight()));
+    }
+
+    @Test
+    public void testTestWithOriginAirportContact() {
+        AirportContactQuery airportContactQuery = new AirportContactQuery();
+        airportContactQuery.setDateTime(new DateTimeQuery(LocalDate.of(2000, 1, 2)));
+        FlightQuery flightQuery = new FlightQuery();
+        flightQuery.setOriginAirportContact(airportContactQuery);
+        Assertions.assertTrue(flightQuery.test(this.createFlight()));
+    }
+
+    @Test
+    public void testTestWithOriginAirportContactFailed() {
+        AirportContactQuery airportContactQuery = new AirportContactQuery();
+        airportContactQuery.setDateTime(new DateTimeQuery(LocalDate.of(2000, 5, 2)));
+        FlightQuery flightQuery = new FlightQuery();
+        flightQuery.setOriginAirportContact(airportContactQuery);
         Assertions.assertFalse(flightQuery.test(this.createFlight()));
     }
 
@@ -43,80 +65,6 @@ public class FlightQueryTest {
     public void testTestWithConnectionFailed() {
         FlightQuery flightQuery = new FlightQuery();
         flightQuery.setConnection(new ConnectionQuery(new DurationQuery(null, Duration.ofHours(1))));
-        Assertions.assertFalse(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDepartureDateTime() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setDepartureDateTime(new DateTimeQuery(LocalDate.of(2000, 1, 2)));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDepartureDateTimeFailed() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setDepartureDateTime(new DateTimeQuery(LocalDate.of(2000, 5, 2)));
-        Assertions.assertFalse(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDestinationAirportCodesNotEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setDestinationAirportCodes(Arrays.asList("MCO", "MIA"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDestinationAirportCodesFailedNotEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setDestinationAirportCodes(Arrays.asList("MIA"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDestinationAirportCodesEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setEnforceExactDestinationAirportCodes(true);
-        flightQuery.setDestinationAirportCodes(Arrays.asList("MCO", "MIA"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithDestinationAirportCodesFailedEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setEnforceExactDestinationAirportCodes(true);
-        flightQuery.setDestinationAirportCodes(Arrays.asList("MIA"));
-        Assertions.assertFalse(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithOriginAirportCodesNotEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setOriginAirportCodes(Arrays.asList("CGN", "BER"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithOriginAirportCodesFailedNotEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setOriginAirportCodes(Arrays.asList("BER"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithOriginAirportCodesEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setEnforceExactOriginAirportCodes(true);
-        flightQuery.setOriginAirportCodes(Arrays.asList("CGN", "BER"));
-        Assertions.assertTrue(flightQuery.test(this.createFlight()));
-    }
-
-    @Test
-    public void testTestWithOriginAirportCodesFailedEnforced() {
-        FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setEnforceExactOriginAirportCodes(true);
-        flightQuery.setOriginAirportCodes(Arrays.asList("BER"));
         Assertions.assertFalse(flightQuery.test(this.createFlight()));
     }
 
@@ -155,8 +103,8 @@ public class FlightQueryTest {
     @Test
     public void testFlattenMultipleAirportsForDepartureAndArrival() {
         FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setOriginAirportCodes(Arrays.asList("CGN"));
-        flightQuery.setDestinationAirportCodes(Arrays.asList("JFK"));
+        flightQuery.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
+        flightQuery.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
         List<FlightQuery> flattenedQueries = flightQuery.flattenMultipleAirportsForDepartureAndArrival();
         Assertions.assertEquals(1, flattenedQueries.size());
         Assertions.assertEquals(flightQuery, flattenedQueries.get(0));
@@ -165,31 +113,31 @@ public class FlightQueryTest {
     @Test
     public void testFlattenMultipleAirportsForDepartureAndArrivalMultipleOriginAirportCodes() {
         FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setOriginAirportCodes(Arrays.asList("CGN", "DUS"));
-        flightQuery.setDestinationAirportCodes(Arrays.asList("JFK"));
+        flightQuery.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN", "DUS"), false));
+        flightQuery.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK"), false));
         List<FlightQuery> flattenedQueries = flightQuery.flattenMultipleAirportsForDepartureAndArrival();
         Assertions.assertEquals(2, flattenedQueries.size());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(1).getDestinationAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(1).getDestinationAirportContact().getAirportCodes());
     }
 
     @Test
     public void testFlattenMultipleAirportsForDepartureAndArrivalMultipleOriginAirportCodesMultipleDestinationAirportCodes() {
         FlightQuery flightQuery = new FlightQuery();
-        flightQuery.setOriginAirportCodes(Arrays.asList("CGN", "DUS"));
-        flightQuery.setDestinationAirportCodes(Arrays.asList("JFK", "EWR"));
+        flightQuery.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN", "DUS"), false));
+        flightQuery.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK", "EWR"), false));
         List<FlightQuery> flattenedQueries = flightQuery.flattenMultipleAirportsForDepartureAndArrival();
         Assertions.assertEquals(4, flattenedQueries.size());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(0).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(0).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(1).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedQueries.get(1).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(2).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(2).getDestinationAirportCodes());
-        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(3).getOriginAirportCodes());
-        Assertions.assertEquals(Arrays.asList("EWR"), flattenedQueries.get(3).getDestinationAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(0).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(0).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("CGN"), flattenedQueries.get(1).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedQueries.get(1).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(2).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("JFK"), flattenedQueries.get(2).getDestinationAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("DUS"), flattenedQueries.get(3).getOriginAirportContact().getAirportCodes());
+        Assertions.assertEquals(Arrays.asList("EWR"), flattenedQueries.get(3).getDestinationAirportContact().getAirportCodes());
     }
 
     private Flight createFlight() {

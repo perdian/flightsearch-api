@@ -94,8 +94,8 @@ public class TripQuery implements Predicate<Trip>, Serializable {
         } else if (this.getFlights().size() == 1) {
             return TripType.ONEWAY;
         } else if (this.getFlights().size() == 2) {
-            boolean firstDepartureLastArrivalIdentical = this.getFlights().get(0).getOriginAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportCodes().containsAll(this.getFlights().get(0).getOriginAirportCodes());
-            boolean firstArrivalLastDepartureIdentical = this.getFlights().get(0).getDestinationAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getOriginAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getOriginAirportCodes().containsAll(this.getFlights().get(0).getDestinationAirportCodes());
+            boolean firstDepartureLastArrivalIdentical = this.getFlights().get(0).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getOriginAirportContact().getAirportCodes());
+            boolean firstArrivalLastDepartureIdentical = this.getFlights().get(0).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getDestinationAirportContact().getAirportCodes());
             return firstDepartureLastArrivalIdentical && firstArrivalLastDepartureIdentical ? TripType.ROUNDTRIP : TripType.MULTILOCATIONTRIP;
         } else {
             return TripType.MULTILOCATIONTRIP;
