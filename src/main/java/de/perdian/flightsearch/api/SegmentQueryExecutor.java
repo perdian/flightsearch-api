@@ -8,6 +8,6 @@ import de.perdian.flightsearch.api.model.SegmentQuery;
 
 public interface SegmentQueryExecutor {
 
-    List<Segment> loadSegment(SegmentQuery segmentQuery) throws IOException;
+    List<Segment> loadSegments(SegmentQuery segmentQuery) throws IOException;
 
 }

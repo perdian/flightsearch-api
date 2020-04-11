@@ -40,9 +40,9 @@ public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
 
     @Override
     public boolean test(Flight flight) {
-        if (this.getOriginAirportContact() != null && !this.getOriginAirportContact().test(flight.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture())) {
+        if (this.getOriginAirportContact() != null && !this.getOriginAirportContact().test(flight.getFirstSegment().getFirstLeg().getScheduledRoute().getOrigin())) {
             return false;
-        } else if (this.getDestinationAirportContact() != null && !this.getDestinationAirportContact().test(flight.getLastSegment().getLastLeg().getScheduledRoute().getArrival())) {
+        } else if (this.getDestinationAirportContact() != null && !this.getDestinationAirportContact().test(flight.getLastSegment().getLastLeg().getScheduledRoute().getDestination())) {
             return false;
         } else if (this.getTotalDuration() != null && !this.getTotalDuration().test(flight.getTotalScheduledDuration())) {
             return false;
@@ -55,7 +55,7 @@ public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
         }
     }
 
-    public List<FlightQuery> flattenMultipleAirportsForDepartureAndArrival() {
+    public List<FlightQuery> flattenMultipleAirportsForOriginAndDestination() {
         if (this.getOriginAirportContact() == null || this.getOriginAirportContact().getAirportCodes() == null || this.getOriginAirportContact().getAirportCodes().isEmpty()) {
             throw new IllegalArgumentException("No origin airport codes specified!");
         } else if (this.getDestinationAirportContact() == null || this.getDestinationAirportContact().getAirportCodes() == null || this.getDestinationAirportContact().getAirportCodes().isEmpty()) {

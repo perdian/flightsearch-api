@@ -26,7 +26,10 @@ public class SegmentQuery implements Predicate<Segment> {
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        toStringBuilder.append("flightNumber", this.getFlightNumber());
         toStringBuilder.append("leg", this.getLeg());
+        toStringBuilder.append("originAirportContact", this.getOriginAirportContact());
+        toStringBuilder.append("destinationAirportContact", this.getDestinationAirportContact());
         return toStringBuilder.toString();
     }
 
@@ -49,9 +52,9 @@ public class SegmentQuery implements Predicate<Segment> {
             return false;
         } else if (!this.testFlightNumber(segment)) {
             return false;
-        } else if (this.getOriginAirportContact() != null && !this.testLegsForAirportContact(this.getOriginAirportContact(), segment.getLegs(), leg -> leg.getScheduledRoute().getDeparture())) {
+        } else if (this.getOriginAirportContact() != null && !this.testLegsForAirportContact(this.getOriginAirportContact(), segment.getLegs(), leg -> leg.getScheduledRoute().getOrigin())) {
             return false;
-        } else if (this.getDestinationAirportContact() != null && !this.testLegsForAirportContact(this.getDestinationAirportContact(), segment.getLegs(), leg -> leg.getScheduledRoute().getArrival())) {
+        } else if (this.getDestinationAirportContact() != null && !this.testLegsForAirportContact(this.getDestinationAirportContact(), segment.getLegs(), leg -> leg.getScheduledRoute().getDestination())) {
             return false;
         } else {
             return true;

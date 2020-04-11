@@ -29,21 +29,21 @@ public class TripQueryTest {
         FlightQuery flightQuery2 = new FlightQuery();
         flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("FRA"), true));
 
-        AirportContact departureContact1 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact arrivalContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
-        Leg leg1 = new Leg(new Route(departureContact1, arrivalContact1), null);
+        AirportContact originContact1 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        AirportContact destinationContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
+        Leg leg1 = new Leg(new Route(originContact1, destinationContact1), null);
         Segment segment1 = new Segment(Arrays.asList(leg1));
         Flight flight1 = new Flight(Arrays.asList(segment1));
 
-        AirportContact departureContact2a = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 16, 00));
-        AirportContact arrivalContact2a = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 2, 20, 00));
-        Leg leg2a = new Leg(new Route(departureContact2a, arrivalContact2a), null);
+        AirportContact originContact2a = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 16, 00));
+        AirportContact destinationContact2a = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 2, 20, 00));
+        Leg leg2a = new Leg(new Route(originContact2a, destinationContact2a), null);
         Segment segment2a = new Segment(Arrays.asList(leg2a));
         Flight flight2a = new Flight(Arrays.asList(segment2a));
 
-        AirportContact departureContact2b = new AirportContact(new Airport("MUC"), LocalDateTime.of(2000, 1, 2, 16, 00));
-        AirportContact arrivalContact2b = new AirportContact(new Airport("EWR"), LocalDateTime.of(2000, 1, 2, 20, 00));
-        Leg leg2b = new Leg(new Route(departureContact2b, arrivalContact2b), null);
+        AirportContact originContact2b = new AirportContact(new Airport("MUC"), LocalDateTime.of(2000, 1, 2, 16, 00));
+        AirportContact destinationContact2b = new AirportContact(new Airport("EWR"), LocalDateTime.of(2000, 1, 2, 20, 00));
+        Leg leg2b = new Leg(new Route(originContact2b, destinationContact2b), null);
         Segment segment2b = new Segment(Arrays.asList(leg2b));
         Flight flight2b = new Flight(Arrays.asList(segment2b));
 
@@ -54,7 +54,7 @@ public class TripQueryTest {
     }
 
     @Test
-    public void testFlattenMultipleAirportsForDepartureAndArrival() {
+    public void testFlattenMultipleAirportsForOriginAndDestination() {
         FlightQuery flightQuery1 = new FlightQuery();
         flightQuery1.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN", "DUS"), false));
         flightQuery1.setDestinationAirportContact(new AirportContactQuery(Arrays.asList("JFK", "EWR"), false));
@@ -64,7 +64,7 @@ public class TripQueryTest {
         TripQuery tripQuery = new TripQuery();
         tripQuery.setFlights(Arrays.asList(flightQuery1, flightQuery2));
 
-        List<TripQuery> flattenedTripQueries = tripQuery.flattenMultipleAirportsForDepartureAndArrival();
+        List<TripQuery> flattenedTripQueries = tripQuery.flattenMultipleAirportsForOriginAndDestination();
         Assertions.assertEquals(8, flattenedTripQueries.size());
         Assertions.assertEquals(Arrays.asList("CGN"), flattenedTripQueries.get(0).getFlights().get(0).getOriginAirportContact().getAirportCodes());
         Assertions.assertEquals(Arrays.asList("JFK"), flattenedTripQueries.get(0).getFlights().get(0).getDestinationAirportContact().getAirportCodes());

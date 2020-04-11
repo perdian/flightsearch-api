@@ -11,46 +11,46 @@ public class Connection implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private AirportContact arrival = null;
-    private AirportContact departure = null;
+    private AirportContact destination = null;
+    private AirportContact origin = null;
 
     public Connection() {
     }
 
-    public Connection(AirportContact arrivalAirportContact, AirportContact departureAirportContact) {
-        this.setArrival(arrivalAirportContact);
-        this.setDeparture(departureAirportContact);
+    public Connection(AirportContact destinationAirportContact, AirportContact originAirportContact) {
+        this.setDestination(destinationAirportContact);
+        this.setOrigin(originAirportContact);
     }
 
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-        if (Objects.equals(this.getArrival().getAirport(), this.getDeparture().getAirport())) {
-            toStringBuilder.append("airportCode", this.getDeparture().getAirport().getCode());
+        if (Objects.equals(this.getDestination().getAirport(), this.getOrigin().getAirport())) {
+            toStringBuilder.append("airportCode", this.getOrigin().getAirport().getCode());
         } else {
-            toStringBuilder.append("arrivalAirportCode", this.getArrival().getAirport().getCode());
-            toStringBuilder.append("departureAirportCode", this.getDeparture().getAirport().getCode());
+            toStringBuilder.append("destinationAirportCode", this.getDestination().getAirport().getCode());
+            toStringBuilder.append("originAirportCode", this.getOrigin().getAirport().getCode());
         }
         toStringBuilder.append("duration", this.getDuration());
         return toStringBuilder.toString();
     }
 
-    public AirportContact getArrival() {
-        return this.arrival;
+    public AirportContact getDestination() {
+        return this.destination;
     }
-    public void setArrival(AirportContact arrival) {
-        this.arrival = arrival;
+    public void setDestination(AirportContact destination) {
+        this.destination = destination;
     }
 
-    public AirportContact getDeparture() {
-        return this.departure;
+    public AirportContact getOrigin() {
+        return this.origin;
     }
-    public void setDeparture(AirportContact departure) {
-        this.departure = departure;
+    public void setOrigin(AirportContact origin) {
+        this.origin = origin;
     }
 
     public Duration getDuration() {
-        return Duration.between(this.getArrival().getZonedDateTime(), this.getDeparture().getZonedDateTime());
+        return Duration.between(this.getDestination().getZonedDateTime(), this.getOrigin().getZonedDateTime());
     }
 
 }

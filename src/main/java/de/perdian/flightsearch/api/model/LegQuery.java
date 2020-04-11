@@ -43,13 +43,13 @@ public class LegQuery implements Predicate<Leg> {
 
     private boolean testBlacklistedAirportCodes(Leg leg) {
         if (this.getBlacklistedAirportCodes() != null && !this.getBlacklistedAirportCodes().isEmpty()) {
-            for (String airportCode : Arrays.asList(leg.getScheduledRoute().getDeparture().getAirport().getCode(), leg.getScheduledRoute().getArrival().getAirport().getCode())) {
+            for (String airportCode : Arrays.asList(leg.getScheduledRoute().getOrigin().getAirport().getCode(), leg.getScheduledRoute().getDestination().getAirport().getCode())) {
                 if (this.getBlacklistedAirportCodes().contains(airportCode)) {
                     return false;
                 }
             }
             if (leg.getActualRoute() != null) {
-                for (String airportCode : Arrays.asList(leg.getActualRoute().getDeparture().getAirport().getCode(), leg.getActualRoute().getArrival().getAirport().getCode())) {
+                for (String airportCode : Arrays.asList(leg.getActualRoute().getOrigin().getAirport().getCode(), leg.getActualRoute().getDestination().getAirport().getCode())) {
                     if (this.getBlacklistedAirportCodes().contains(airportCode)) {
                         return false;
                     }

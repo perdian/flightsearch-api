@@ -46,7 +46,7 @@ public class ConnectionQuery implements Predicate<Connection> {
 
     private boolean testBlacklistedAirportCodes(Connection connection) {
         if (this.getBlacklistedAirportCodes() != null && !this.getBlacklistedAirportCodes().isEmpty()) {
-            for (String airportCode : Arrays.asList(connection.getArrival().getAirport().getCode(), connection.getDeparture().getAirport().getCode())) {
+            for (String airportCode : Arrays.asList(connection.getDestination().getAirport().getCode(), connection.getOrigin().getAirport().getCode())) {
                 if (this.getBlacklistedAirportCodes().contains(airportCode)) {
                     return false;
                 }

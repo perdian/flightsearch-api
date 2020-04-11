@@ -12,22 +12,22 @@ public class Route implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private AirportContact departure = null;
-    private AirportContact arrival = null;
+    private AirportContact origin = null;
+    private AirportContact destination = null;
 
     public Route() {
     }
 
-    public Route(AirportContact departure, AirportContact arrival) {
-        this.setDeparture(departure);
-        this.setArrival(arrival);
+    public Route(AirportContact origin, AirportContact destination) {
+        this.setOrigin(origin);
+        this.setDestination(destination);
     }
 
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-        toStringBuilder.append("departure", this.getDeparture());
-        toStringBuilder.append("arrival", this.getArrival());
+        toStringBuilder.append("origin", this.getOrigin());
+        toStringBuilder.append("destination", this.getDestination());
         return toStringBuilder.toString();
     }
 
@@ -37,8 +37,8 @@ public class Route implements Serializable {
             return true;
         } else if (that instanceof Route) {
             EqualsBuilder equalsBuilder = new EqualsBuilder();
-            equalsBuilder.append(this.getDeparture(), ((Route)that).getDeparture());
-            equalsBuilder.append(this.getArrival(), ((Route)that).getArrival());
+            equalsBuilder.append(this.getOrigin(), ((Route)that).getOrigin());
+            equalsBuilder.append(this.getDestination(), ((Route)that).getDestination());
             return equalsBuilder.isEquals();
         } else {
             return false;
@@ -48,27 +48,27 @@ public class Route implements Serializable {
     @Override
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        hashCodeBuilder.append(this.getDeparture());
-        hashCodeBuilder.append(this.getArrival());
+        hashCodeBuilder.append(this.getOrigin());
+        hashCodeBuilder.append(this.getDestination());
         return hashCodeBuilder.toHashCode();
     }
 
     public Duration getDuration() {
-        return Duration.between(this.getDeparture().getZonedDateTime(), this.getArrival().getZonedDateTime());
+        return Duration.between(this.getOrigin().getZonedDateTime(), this.getDestination().getZonedDateTime());
     }
 
-    public AirportContact getDeparture() {
-        return this.departure;
+    public AirportContact getOrigin() {
+        return this.origin;
     }
-    public void setDeparture(AirportContact departure) {
-        this.departure = departure;
+    public void setOrigin(AirportContact origin) {
+        this.origin = origin;
     }
 
-    public AirportContact getArrival() {
-        return this.arrival;
+    public AirportContact getDestination() {
+        return this.destination;
     }
-    public void setArrival(AirportContact arrival) {
-        this.arrival = arrival;
+    public void setDestination(AirportContact destination) {
+        this.destination = destination;
     }
 
 }

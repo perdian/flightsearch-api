@@ -14,8 +14,8 @@ public class ConnectionTest {
         AirportContact c1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 3, 4));
         AirportContact c2 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 2, 3, 4, 5));
         Connection connection = new Connection(c1, c2);
-        Assertions.assertEquals(c1, connection.getArrival());
-        Assertions.assertEquals(c2, connection.getDeparture());
+        Assertions.assertEquals(c1, connection.getDestination());
+        Assertions.assertEquals(c2, connection.getOrigin());
     }
 
     @Test

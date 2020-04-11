@@ -106,9 +106,9 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithOriginAirportContact() {
-        AirportContact machtchingLeg1Departure = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact machtchingLeg1Arrival = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
-        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Departure, machtchingLeg1Arrival), null);
+        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
+        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Origin, machtchingLeg1Destination), null);
         Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
         Segment otherSegment = new Segment();
         SegmentQuery segmentQuery = new SegmentQuery();
@@ -119,9 +119,9 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithDestinationAirportContact() {
-        AirportContact machtchingLeg1Departure = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact machtchingLeg1Arrival = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
-        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Departure, machtchingLeg1Arrival), null);
+        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
+        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Origin, machtchingLeg1Destination), null);
         Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
         Segment otherSegment = new Segment();
         SegmentQuery segmentQuery = new SegmentQuery();

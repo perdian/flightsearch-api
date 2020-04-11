@@ -67,16 +67,16 @@ public class Flight implements Serializable {
         } else {
             List<Connection> connections = new ArrayList<>(flattenedLegs.size() - 1);
             for (int i=1; i < flattenedLegs.size(); i++) {
-                connections.add(new Connection(flattenedLegs.get(i-1).getScheduledRoute().getArrival(), flattenedLegs.get(i).getScheduledRoute().getDeparture()));
+                connections.add(new Connection(flattenedLegs.get(i-1).getScheduledRoute().getDestination(), flattenedLegs.get(i).getScheduledRoute().getOrigin()));
             }
             return Collections.unmodifiableList(connections);
         }
     }
 
     public Duration getTotalScheduledDuration() {
-        ZonedDateTime firstItemDeparture = this.getFirstSegment().getFirstLeg().getScheduledRoute().getDeparture().getZonedDateTime();
-        ZonedDateTime lastItemArrival = this.getLastSegment().getLastLeg().getScheduledRoute().getArrival().getZonedDateTime();
-        return Duration.between(firstItemDeparture, lastItemArrival);
+        ZonedDateTime firstItemOrigin = this.getFirstSegment().getFirstLeg().getScheduledRoute().getOrigin().getZonedDateTime();
+        ZonedDateTime lastItemDestination = this.getLastSegment().getLastLeg().getScheduledRoute().getDestination().getZonedDateTime();
+        return Duration.between(firstItemOrigin, lastItemDestination);
     }
 
     public Segment getFirstSegment() {

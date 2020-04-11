@@ -28,7 +28,7 @@ public class LegQueryTest {
     }
 
     @Test
-    public void testTestWithBlacklistedAirportCodesFailedDeparture() {
+    public void testTestWithBlacklistedAirportCodesFailedOrigin() {
         AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
         AirportContact ac2 = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
         LegQuery legQuery = new LegQuery();
@@ -37,7 +37,7 @@ public class LegQueryTest {
     }
 
     @Test
-    public void testTestWithBlacklistedAirportCodesFailedArrival() {
+    public void testTestWithBlacklistedAirportCodesFailedDestination() {
         AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
         AirportContact ac2 = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
         LegQuery legQuery = new LegQuery();

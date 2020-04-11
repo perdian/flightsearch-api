@@ -58,8 +58,8 @@ public class TripQuery implements Predicate<Trip>, Serializable {
         }
     }
 
-    public List<TripQuery> flattenMultipleAirportsForDepartureAndArrival() {
-        return this.flattenMultipleAirportsForDepartureAndArrival(Collections.emptyList(), this.getFlights()).stream()
+    public List<TripQuery> flattenMultipleAirportsForOriginAndDestination() {
+        return this.flattenMultipleAirportsForOriginAndDestination(Collections.emptyList(), this.getFlights()).stream()
             .map(legQueries -> {
                 TripQuery tripQuery = new TripQuery();
                 tripQuery.setCabinClass(this.getCabinClass());
@@ -70,8 +70,8 @@ public class TripQuery implements Predicate<Trip>, Serializable {
             .collect(Collectors.toList());
     }
 
-    private List<List<FlightQuery>> flattenMultipleAirportsForDepartureAndArrival(List<List<FlightQuery>> existingList, List<FlightQuery> moreLegs) {
-        List<FlightQuery> nextLegs = moreLegs.get(0).flattenMultipleAirportsForDepartureAndArrival();
+    private List<List<FlightQuery>> flattenMultipleAirportsForOriginAndDestination(List<List<FlightQuery>> existingList, List<FlightQuery> moreLegs) {
+        List<FlightQuery> nextLegs = moreLegs.get(0).flattenMultipleAirportsForOriginAndDestination();
         List<List<FlightQuery>> resultList = new ArrayList<>();
         if (existingList.isEmpty()) {
             nextLegs.forEach(nextLegQuery -> resultList.add(Arrays.asList(nextLegQuery)));
@@ -85,7 +85,7 @@ public class TripQuery implements Predicate<Trip>, Serializable {
             }
         }
         List<FlightQuery> remainingLegs = moreLegs.subList(1, moreLegs.size());
-        return remainingLegs.isEmpty() ? resultList : this.flattenMultipleAirportsForDepartureAndArrival(resultList, remainingLegs);
+        return remainingLegs.isEmpty() ? resultList : this.flattenMultipleAirportsForOriginAndDestination(resultList, remainingLegs);
     }
 
     public TripType getTripType() {
@@ -94,9 +94,9 @@ public class TripQuery implements Predicate<Trip>, Serializable {
         } else if (this.getFlights().size() == 1) {
             return TripType.ONEWAY;
         } else if (this.getFlights().size() == 2) {
-            boolean firstDepartureLastArrivalIdentical = this.getFlights().get(0).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getOriginAirportContact().getAirportCodes());
-            boolean firstArrivalLastDepartureIdentical = this.getFlights().get(0).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getDestinationAirportContact().getAirportCodes());
-            return firstDepartureLastArrivalIdentical && firstArrivalLastDepartureIdentical ? TripType.ROUNDTRIP : TripType.MULTILOCATIONTRIP;
+            boolean firstOriginLastDestinationIdentical = this.getFlights().get(0).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getOriginAirportContact().getAirportCodes());
+            boolean firstDestinationLastOriginIdentical = this.getFlights().get(0).getDestinationAirportContact().getAirportCodes().containsAll(this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes()) && this.getFlights().get(this.getFlights().size() - 1).getOriginAirportContact().getAirportCodes().containsAll(this.getFlights().get(0).getDestinationAirportContact().getAirportCodes());
+            return firstOriginLastDestinationIdentical && firstDestinationLastOriginIdentical ? TripType.ROUNDTRIP : TripType.MULTILOCATIONTRIP;
         } else {
             return TripType.MULTILOCATIONTRIP;
         }

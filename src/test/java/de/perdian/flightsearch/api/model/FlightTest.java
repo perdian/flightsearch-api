@@ -51,11 +51,11 @@ public class FlightTest {
         Flight flight = new Flight(Arrays.asList(s1, s2));
         List<Connection> scheduledConnections = flight.computeScheduledConnections();
         Assertions.assertEquals(2, scheduledConnections.size());
-        Assertions.assertEquals(r1.getArrival(), scheduledConnections.get(0).getArrival());
-        Assertions.assertEquals(r2.getDeparture(), scheduledConnections.get(0).getDeparture());
+        Assertions.assertEquals(r1.getDestination(), scheduledConnections.get(0).getDestination());
+        Assertions.assertEquals(r2.getOrigin(), scheduledConnections.get(0).getOrigin());
         Assertions.assertEquals(Duration.ofMinutes(45), scheduledConnections.get(0).getDuration());
-        Assertions.assertEquals(r2.getArrival(), scheduledConnections.get(1).getArrival());
-        Assertions.assertEquals(r3.getDeparture(), scheduledConnections.get(1).getDeparture());
+        Assertions.assertEquals(r2.getDestination(), scheduledConnections.get(1).getDestination());
+        Assertions.assertEquals(r3.getOrigin(), scheduledConnections.get(1).getOrigin());
         Assertions.assertEquals(Duration.ofMinutes(60), scheduledConnections.get(1).getDuration());
         Assertions.assertEquals(Duration.ofHours(5).plusMinutes(5), flight.getTotalScheduledDuration());
     }

@@ -38,12 +38,12 @@ public class SegmentTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public void testEquals() {
-        AirportContact departureContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact arrivalContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
-        Leg leg1 = new Leg(new Route(departureContact1, arrivalContact1), null);
-        AirportContact departureContact2 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 3, 16, 00));
-        AirportContact arrivalContact2 = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 3, 17, 00));
-        Leg leg2 = new Leg(new Route(departureContact2, arrivalContact2), null);
+        AirportContact originContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        AirportContact destinationContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
+        Leg leg1 = new Leg(new Route(originContact1, destinationContact1), null);
+        AirportContact originContact2 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 3, 16, 00));
+        AirportContact destinationContact2 = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 3, 17, 00));
+        Leg leg2 = new Leg(new Route(originContact2, destinationContact2), null);
         Segment segment1a = new Segment(Arrays.asList(leg1));
         Segment segment1b = new Segment(Arrays.asList(leg1));
         Segment segment2 = new Segment(Arrays.asList(leg1, leg2));
