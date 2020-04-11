@@ -13,6 +13,14 @@ public class OfferGroup implements Serializable {
     private String title = null;
     private List<Offer> offers = null;
 
+    public OfferGroup() {
+    }
+
+    public OfferGroup(String title, List<Offer> offers) {
+        this.setTitle(title);
+        this.setOffers(offers);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);

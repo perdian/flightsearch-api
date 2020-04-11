@@ -3,6 +3,8 @@ package de.perdian.flightsearch.api.model;
 import java.io.Serializable;
 import java.time.Instant;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,21 +18,43 @@ public class Quote implements Serializable {
     private String details = null;
     private String shoppingDeeplinkUrl = null;
 
+    public Quote() {
+    }
+
+    public Quote(String provider, Price price) {
+        this.setProvider(provider);
+        this.setPrice(price);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    public boolean isCheaperThan(Quote other) {
-        return Quote.compareByPrice(this, other) < 0;
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        } else if (that instanceof Quote) {
+            EqualsBuilder equalsBuilder = new EqualsBuilder();
+            equalsBuilder.append(this.getProvider(), ((Quote)that).getProvider());
+            equalsBuilder.append(this.getPrice(), ((Quote)that).getPrice());
+            return equalsBuilder.isEquals();
+        } else {
+            return false;
+        }
     }
 
-    public boolean isMoreExpensiveThan(Quote other) {
-        return Quote.compareByPrice(this, other) > 0;
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+        hashCodeBuilder.append(this.getProvider());
+        hashCodeBuilder.append(this.getPrice());
+        return hashCodeBuilder.toHashCode();
     }
 
     public static int compareByPrice(Quote q1, Quote q2) {
-        return q1.getPrice().compareTo(q2.getPrice());
+        return Price.compareByValue(q1.getPrice(), q2.getPrice());
     }
 
     public String getProvider() {

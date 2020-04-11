@@ -25,8 +25,13 @@ public class QuoteQuery implements Predicate<Quote> {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    public boolean testAny(List<Quote> references) {
-        return references.stream().filter(reference -> this.test(reference)).findAny().isPresent();
+    public boolean testAny(List<Quote> quotes) {
+        for (Quote quote : quotes) {
+            if (this.test(quote)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

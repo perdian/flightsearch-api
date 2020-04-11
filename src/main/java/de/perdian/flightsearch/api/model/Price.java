@@ -8,24 +8,28 @@ import java.text.NumberFormat;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Price implements Serializable, Comparable<Price> {
+public class Price implements Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private String currencyCode = null;
     private BigDecimal value = null;
+    private String currencyCode = null;
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append(this.getValueString());
-        result.append(" ").append(this.getCurrencyCode());
-        return result.toString();
+    public Price() {
+    }
+
+    public Price(BigDecimal value, String currencyCode) {
+        this.setValue(value);
+        this.setCurrencyCode(currencyCode);
     }
 
     @Override
-    public int compareTo(Price that) {
-        return this.getValue().compareTo(that.getValue());
+    public String toString() {
+        NumberFormat numberFormat = new DecimalFormat("#,##0.00");
+        StringBuilder result = new StringBuilder();
+        result.append(numberFormat.format(this.getValue()));
+        result.append(" ").append(this.getCurrencyCode());
+        return result.toString();
     }
 
     @Override
@@ -34,8 +38,8 @@ public class Price implements Serializable, Comparable<Price> {
             return true;
         } else if (that instanceof Price) {
             EqualsBuilder equalsBuilder = new EqualsBuilder();
-            equalsBuilder.append(this.getCurrencyCode(), ((Price)that).getCurrencyCode());
             equalsBuilder.append(this.getValue(), ((Price)that).getValue());
+            equalsBuilder.append(this.getCurrencyCode(), ((Price)that).getCurrencyCode());
             return equalsBuilder.isEquals();
         } else {
             return false;
@@ -45,9 +49,20 @@ public class Price implements Serializable, Comparable<Price> {
     @Override
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        hashCodeBuilder.append(this.getCurrencyCode());
         hashCodeBuilder.append(this.getValue());
+        hashCodeBuilder.append(this.getCurrencyCode());
         return hashCodeBuilder.toHashCode();
+    }
+
+    public static int compareByValue(Price p1, Price p2) {
+        return p1.getValue().compareTo(p2.getValue());
+    }
+
+    public BigDecimal getValue() {
+        return this.value;
+    }
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public String getCurrencyCode() {
@@ -55,17 +70,6 @@ public class Price implements Serializable, Comparable<Price> {
     }
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
-    }
-
-    public String getValueString() {
-        NumberFormat numberFormat = new DecimalFormat("#,##0.00");
-        return numberFormat.format(this.getValue());
-    }
-    public BigDecimal getValue() {
-        return this.value;
-    }
-    public void setValue(BigDecimal value) {
-        this.value = value;
     }
 
 }
