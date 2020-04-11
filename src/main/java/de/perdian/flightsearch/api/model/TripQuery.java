@@ -15,7 +15,7 @@ public class TripQuery implements Predicate<Trip>, Serializable {
 
     static final long serialVersionUID = 1L;
 
-    private List<FlightQuery> flights = null;
+    private List<FlightQuery> flights = Collections.emptyList();
     private CabinClass cabinClass = CabinClass.ECONOMY;
     private int passengerCount = 1;
 

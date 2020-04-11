@@ -1,8 +1,6 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.Duration;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -55,17 +53,6 @@ public class Route implements Serializable {
         return hashCodeBuilder.toHashCode();
     }
 
-    public String getDurationFormatted() {
-        if (this.getDuration() == null) {
-            return null;
-        } else {
-            NumberFormat numberFormat = new DecimalFormat("00");
-            StringBuilder result = new StringBuilder();
-            result.append(numberFormat.format(this.getDuration().toMinutes() / 60));
-            result.append(":").append(numberFormat.format(this.getDuration().toMinutes() % 60));
-            return result.toString();
-        }
-    }
     public Duration getDuration() {
         return Duration.between(this.getDeparture().getZonedDateTime(), this.getArrival().getZonedDateTime());
     }
