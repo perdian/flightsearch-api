@@ -17,6 +17,7 @@ public class FlightNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
     private Airline airline = null;
+    private Airline operatingAirline = null;
     private int flightNumber = 0;
     private String postfix = null;
 
@@ -77,6 +78,13 @@ public class FlightNumber implements Serializable {
     }
     public void setAirline(Airline airline) {
         this.airline = airline;
+    }
+
+    public Airline getOperatingAirline() {
+        return this.operatingAirline;
+    }
+    public void setOperatingAirline(Airline operatingAirline) {
+        this.operatingAirline = operatingAirline;
     }
 
     public int getFlightNumber() {

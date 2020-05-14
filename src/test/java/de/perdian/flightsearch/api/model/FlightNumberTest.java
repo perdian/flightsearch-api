@@ -11,6 +11,7 @@ public class FlightNumberTest {
         Assertions.assertEquals("LH", flightNumber.getAirline().getCode());
         Assertions.assertEquals("Lufthansa", flightNumber.getAirline().getName());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertNull(flightNumber.getPostfix());
         Assertions.assertEquals("LH0042", flightNumber.toString());
     }
@@ -21,6 +22,7 @@ public class FlightNumberTest {
         Assertions.assertEquals("LH", flightNumber.getAirline().getCode());
         Assertions.assertEquals("Lufthansa", flightNumber.getAirline().getName());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertEquals("A", flightNumber.getPostfix());
         Assertions.assertEquals("LH0042A", flightNumber.toString());
     }
@@ -35,6 +37,7 @@ public class FlightNumberTest {
         FlightNumber flightNumber = new FlightNumber(new Airline("XX"), 42, null);
         Assertions.assertEquals("XX", flightNumber.getAirline().getCode());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertNull(flightNumber.getPostfix());
         Assertions.assertEquals("XX0042", flightNumber.toString());
     }
@@ -44,6 +47,7 @@ public class FlightNumberTest {
         FlightNumber flightNumber = new FlightNumber(new Airline("XX"), 42, "A");
         Assertions.assertEquals("XX", flightNumber.getAirline().getCode());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertEquals("A", flightNumber.getPostfix());
         Assertions.assertEquals("XX0042A", flightNumber.toString());
     }
@@ -53,6 +57,7 @@ public class FlightNumberTest {
         FlightNumber flightNumber = new FlightNumber("XX", 42, null);
         Assertions.assertEquals("XX", flightNumber.getAirline().getCode());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertNull(flightNumber.getPostfix());
         Assertions.assertEquals("XX0042", flightNumber.toString());
     }
@@ -62,6 +67,7 @@ public class FlightNumberTest {
         FlightNumber flightNumber = new FlightNumber("XX", 42, "A");
         Assertions.assertEquals("XX", flightNumber.getAirline().getCode());
         Assertions.assertEquals(42, flightNumber.getFlightNumber());
+        Assertions.assertNull(flightNumber.getOperatingAirline());
         Assertions.assertEquals("A", flightNumber.getPostfix());
         Assertions.assertEquals("XX0042A", flightNumber.toString());
     }
