@@ -19,6 +19,7 @@ public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
     private DurationQuery totalDuration = null;
     private SegmentQuery segment = null;
     private ConnectionQuery connection = null;
+    private Integer maxConnections = null;
 
     @Override
     public FlightQuery clone() {
@@ -48,7 +49,17 @@ public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
             return false;
         } else if (this.getSegment() != null && !this.getSegment().testAll(flight.getSegments())) {
             return false;
-        } else if (this.getConnection() != null && !this.getConnection().testAll(flight.computeScheduledConnections())) {
+        } else if (!this.testConnections(flight.computeScheduledConnections())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean testConnections(List<Connection> connections) {
+        if (this.getMaxConnections() != null && this.getMaxConnections().intValue() < connections.size()) {
+            return false;
+        } else if (this.getConnection() != null && !this.getConnection().testAll(connections)) {
             return false;
         } else {
             return true;
@@ -113,6 +124,13 @@ public class FlightQuery implements Serializable, Cloneable, Predicate<Flight> {
     }
     public void setConnection(ConnectionQuery connection) {
         this.connection = connection;
+    }
+
+    public Integer getMaxConnections() {
+        return this.maxConnections;
+    }
+    public void setMaxConnections(Integer maxConnections) {
+        this.maxConnections = maxConnections;
     }
 
 }

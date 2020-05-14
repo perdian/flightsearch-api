@@ -101,6 +101,13 @@ public class FlightQueryTest {
     }
 
     @Test
+    public void testTestWithMaxConnections() {
+        FlightQuery flightQuery = new FlightQuery();
+        flightQuery.setMaxConnections(Integer.valueOf(1));
+        Assertions.assertFalse(flightQuery.test(this.createFlight()));
+    }
+
+    @Test
     public void testFlattenMultipleAirportsForOriginAndDestination() {
         FlightQuery flightQuery = new FlightQuery();
         flightQuery.setOriginAirportContact(new AirportContactQuery(Arrays.asList("CGN"), false));
