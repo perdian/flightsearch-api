@@ -34,8 +34,10 @@
     <properties>
         <commons-lang3.version>3.9</commons-lang3.version>
         <java.version>1.8</java.version>
+        <javax.json.version>1.1.4</javax.json.version>
         <junit.version>5.6.2</junit.version>
         <mockito.version>3.3.3</mockito.version>
+        <okhttp.version>4.5.0</okhttp.version>
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
@@ -49,6 +51,17 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>${javax.json.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
