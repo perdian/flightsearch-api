@@ -179,13 +179,13 @@ public class EbookersOfferQueryExecutor implements OfferQueryExecutor {
     }
 
     private Aircraft parseAircraftFromTimeline(JsonObject jsonTimelineItem) {
-        String aircraftCode = jsonTimelineItem.getJsonObject("carrier").getString("planeCode");
+        String aircraftCode = jsonTimelineItem.getJsonObject("carrier").getString("planeCode", null);
         if (StringUtils.isEmpty(aircraftCode)) {
             return null;
         } else {
             Aircraft aircraft = new Aircraft();
             aircraft.setType(AircraftTypeRepository.getInstance().loadAircraftTypeByCode(aircraftCode));
-            aircraft.setTypeDescription(jsonTimelineItem.getJsonObject("carrier").getString("plane"));
+            aircraft.setTypeDescription(jsonTimelineItem.getJsonObject("carrier").getString("plane", null));
             return aircraft;
         }
     }
@@ -195,7 +195,7 @@ public class EbookersOfferQueryExecutor implements OfferQueryExecutor {
     }
 
     private Airline parseOperatingAirline(JsonObject jsonCarrier) {
-        String operatedByAirlineCode = jsonCarrier.getString("operatedByAirlineCode");
+        String operatedByAirlineCode = jsonCarrier.getString("operatedByAirlineCode", null);
         if (StringUtils.isNotEmpty(operatedByAirlineCode)) {
             return AirlineRepository.getInstance().loadAirlineByCode(operatedByAirlineCode);
         } else {
