@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import de.perdian.flightsearch.api.OfferQueryExecutor;
 import de.perdian.flightsearch.api.model.Aircraft;
 import de.perdian.flightsearch.api.model.AircraftTypeRepository;
+import de.perdian.flightsearch.api.model.Airline;
 import de.perdian.flightsearch.api.model.AirlineRepository;
 import de.perdian.flightsearch.api.model.Airport;
 import de.perdian.flightsearch.api.model.AirportContact;
@@ -163,16 +164,17 @@ public class EbookersOfferQueryExecutor implements OfferQueryExecutor {
 
     private Segment parseSegmentFromTimelineItem(JsonObject jsonTimelineItem) {
 
-      AirportContact originContact = this.parseAirportContactFromTimeline(jsonTimelineItem, "departureAirport", "departureTime");
-      AirportContact destinationContact = this.parseAirportContactFromTimeline(jsonTimelineItem, "arrivalAirport", "arrivalTime");
-      Leg leg = new Leg();
-      leg.setAircraft(this.parseAircraftFromTimeline(jsonTimelineItem));
-      leg.setScheduledRoute(new Route(originContact, destinationContact));
+        AirportContact originContact = this.parseAirportContactFromTimeline(jsonTimelineItem, "departureAirport", "departureTime");
+        AirportContact destinationContact = this.parseAirportContactFromTimeline(jsonTimelineItem, "arrivalAirport", "arrivalTime");
+        Leg leg = new Leg();
+        leg.setAircraft(this.parseAircraftFromTimeline(jsonTimelineItem));
+        leg.setScheduledRoute(new Route(originContact, destinationContact));
 
-      Segment segment = new Segment();
-      segment.setLegs(Arrays.asList(leg));
-      segment.setMarketingFlightNumber(this.parseFlightNumber(jsonTimelineItem.getJsonObject("carrier")));
-      return segment;
+        Segment segment = new Segment();
+        segment.setLegs(Arrays.asList(leg));
+        segment.setOperatingAirline(this.parseOperatingAirline(jsonTimelineItem.getJsonObject("carrier")));
+        segment.setMarketingFlightNumber(this.parseFlightNumber(jsonTimelineItem.getJsonObject("carrier")));
+        return segment;
 
     }
 
@@ -189,12 +191,16 @@ public class EbookersOfferQueryExecutor implements OfferQueryExecutor {
     }
 
     private FlightNumber parseFlightNumber(JsonObject jsonCarrier) {
-        FlightNumber flightNumber = new FlightNumber(jsonCarrier.getString("airlineCode"), Integer.parseInt(jsonCarrier.getString("flightNumber")), null);
+        return new FlightNumber(jsonCarrier.getString("airlineCode"), Integer.parseInt(jsonCarrier.getString("flightNumber")), null);
+    }
+
+    private Airline parseOperatingAirline(JsonObject jsonCarrier) {
         String operatedByAirlineCode = jsonCarrier.getString("operatedByAirlineCode");
         if (StringUtils.isNotEmpty(operatedByAirlineCode)) {
-            flightNumber.setOperatingAirline(AirlineRepository.getInstance().loadAirlineByCode(operatedByAirlineCode));
+            return AirlineRepository.getInstance().loadAirlineByCode(operatedByAirlineCode);
+        } else {
+            return null;
         }
-        return flightNumber;
     }
 
     private AirportContact parseAirportContactFromTimeline(JsonObject jsonTimeline, String airportNodeName, String dateNodeName) {

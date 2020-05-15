@@ -13,6 +13,7 @@ public class Segment implements Serializable {
 
     static final long serialVersionUID = 1L;
 
+    private Airline operatingAirline = null;
     private FlightNumber operatingFlightNumber = null;
     private FlightNumber marketingFlightNumber = null;
     private List<FlightNumber> codeshareFlightNumbers = null;
@@ -28,6 +29,7 @@ public class Segment implements Serializable {
     @Override
     public String toString() {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        toStringBuilder.append("operatingAirline", this.getOperatingFlightNumber());
         toStringBuilder.append("operatingFlightNumber", this.getOperatingFlightNumber());
         toStringBuilder.append("marketingFlightNumber", this.getMarketingFlightNumber());
         return toStringBuilder.toString();
@@ -51,6 +53,13 @@ public class Segment implements Serializable {
         HashCodeBuilder hashCodeBulder = new HashCodeBuilder();
         hashCodeBulder.append(this.getLegs());
         return hashCodeBulder.toHashCode();
+    }
+
+    public Airline getOperatingAirline() {
+        return this.operatingAirline;
+    }
+    public void setOperatingAirline(Airline operatingAirline) {
+        this.operatingAirline = operatingAirline;
     }
 
     public FlightNumber getOperatingFlightNumber() {
