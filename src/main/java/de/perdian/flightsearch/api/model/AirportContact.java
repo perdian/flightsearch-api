@@ -1,7 +1,9 @@
 package de.perdian.flightsearch.api.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,16 +14,18 @@ public class AirportContact implements Serializable {
     static final long serialVersionUID = 1L;
 
     private Airport airport = null;
-    private LocalDateTime localDateTime = null;
+    private LocalDate localDate = null;
+    private LocalTime localTime = null;
     private String terminal = null;
     private String gate = null;
 
     public AirportContact() {
     }
 
-    public AirportContact(Airport airport, LocalDateTime localDateTime) {
+    public AirportContact(Airport airport, LocalDate localDate, LocalTime localTime) {
         this.setAirport(airport);
-        this.setLocalDateTime(localDateTime);
+        this.setLocalDate(localDate);
+        this.setLocalTime(localTime);
     }
 
     @Override
@@ -58,15 +62,25 @@ public class AirportContact implements Serializable {
         this.airport = airport;
     }
 
+    public LocalDateTime getLocalDateTime() {
+        return this.getLocalDate() == null || this.getLocalTime() == null ? null : LocalDateTime.of(this.getLocalDate(), this.getLocalTime());
+    }
     public ZonedDateTime getZonedDateTime() {
-        return this.getLocalDateTime().atZone(this.getAirport().getTimezoneId());
+        return this.getLocalDate() == null || this.getLocalTime() == null ? null : LocalDateTime.of(this.getLocalDate(), this.getLocalTime()).atZone(this.getAirport().getTimezoneId());
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return this.localDateTime;
+    public LocalDate getLocalDate() {
+        return this.localDate;
     }
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public LocalTime getLocalTime() {
+        return this.localTime;
+    }
+    public void setLocalTime(LocalTime localTime) {
+        this.localTime = localTime;
     }
 
     public String getTerminal() {

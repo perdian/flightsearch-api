@@ -1,7 +1,8 @@
 package de.perdian.flightsearch.api.model;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 
@@ -24,10 +25,10 @@ public class ConnectionQueryTest {
 
         Airport a1 = new Airport("CGN", ZoneId.of("Europe/Berlin"));
         Airport a2 = new Airport("FRA", ZoneId.of("Europe/Berlin"));
-        AirportContact c1 = new AirportContact(a1, LocalDateTime.of(2000, 1, 2, 3, 4));
-        AirportContact c2a = new AirportContact(a2, LocalDateTime.of(2000, 1, 2, 3, 35));
-        AirportContact c2b = new AirportContact(a2, LocalDateTime.of(2000, 1, 2, 3, 40));
-        AirportContact c3 = new AirportContact(a2, LocalDateTime.of(2000, 1, 3, 3, 4));
+        AirportContact c1 = new AirportContact(a1, LocalDate.of(2000, 1, 2), LocalTime.of(3, 4));
+        AirportContact c2a = new AirportContact(a2, LocalDate.of(2000, 1, 2), LocalTime.of(3, 35));
+        AirportContact c2b = new AirportContact(a2, LocalDate.of(2000, 1, 2), LocalTime.of(3, 40));
+        AirportContact c3 = new AirportContact(a2, LocalDate.of(2000, 1, 3), LocalTime.of(3, 4));
 
         Assertions.assertTrue(connectionQuery.test(new Connection(c1, c2a)));
         Assertions.assertTrue(connectionQuery.test(new Connection(c1, c2b)));
@@ -41,9 +42,9 @@ public class ConnectionQueryTest {
         ConnectionQuery connectionQuery = new ConnectionQuery();
         connectionQuery.setBlacklistedAirportCodes(Arrays.asList("DUS"));
 
-        AirportContact c1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 3, 4));
-        AirportContact c2 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 3, 35));
-        AirportContact c3 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 2, 3, 40));
+        AirportContact c1 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(3, 4));
+        AirportContact c2 = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(3, 35));
+        AirportContact c3 = new AirportContact(new Airport("DUS"), LocalDate.of(2000, 1, 2), LocalTime.of(3, 40));
 
         Assertions.assertTrue(connectionQuery.test(new Connection(c1, c2)));
         Assertions.assertFalse(connectionQuery.test(new Connection(c1, c3)));

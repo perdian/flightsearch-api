@@ -1,5 +1,6 @@
 package de.perdian.flightsearch.api.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -7,7 +8,9 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class SegmentQuery implements Predicate<Segment> {
+public class SegmentQuery implements Predicate<Segment>, Serializable {
+
+    static final long serialVersionUID = 1L;
 
     private LegQuery leg = null;
     private FlightNumber flightNumber = null;

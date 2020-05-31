@@ -2,7 +2,7 @@ package de.perdian.flightsearch.api.model;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
@@ -148,12 +148,12 @@ public class FlightQueryTest {
     }
 
     private Flight createFlight() {
-        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 10, 00));
-        AirportContact ac2 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 11, 00));
-        AirportContact ac3 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact ac4 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDateTime.of(2000, 1, 2, 18, 00));
-        AirportContact ac5 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDateTime.of(2000, 1, 2, 18, 30));
-        AirportContact ac6 = new AirportContact(new Airport("MCO", ZoneId.of("America/New_York")), LocalDateTime.of(2000, 1, 3, 01, 00));
+        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(10, 00));
+        AirportContact ac2 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(11, 00));
+        AirportContact ac3 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact ac4 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDate.of(2000, 1, 2), LocalTime.of(18, 00));
+        AirportContact ac5 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDate.of(2000, 1, 2), LocalTime.of(18, 30));
+        AirportContact ac6 = new AirportContact(new Airport("MCO", ZoneId.of("America/New_York")), LocalDate.of(2000, 1, 3), LocalTime.of(01, 00));
         Segment s1 = new Segment(Arrays.asList(new Leg(new Route(ac1, ac2), null)));
         Segment s2 = new Segment(Arrays.asList(new Leg(new Route(ac3, ac4), null), new Leg(new Route(ac5, ac6), null)));
         return new Flight(Arrays.asList(s1, s2));

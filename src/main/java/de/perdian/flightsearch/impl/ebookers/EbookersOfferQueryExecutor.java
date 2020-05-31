@@ -2,6 +2,7 @@ package de.perdian.flightsearch.impl.ebookers;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -206,9 +207,11 @@ public class EbookersOfferQueryExecutor implements OfferQueryExecutor {
     private AirportContact parseAirportContactFromTimeline(JsonObject jsonTimeline, String airportNodeName, String dateNodeName) {
         Airport airport = AirportRepository.getInstance().loadAirportByCode(jsonTimeline.getJsonObject(airportNodeName).getString("code"));
         OffsetDateTime departureTime = OffsetDateTime.parse(jsonTimeline.getJsonObject(dateNodeName).getString("isoStr"));
+        LocalDateTime localDateTime = departureTime.atZoneSameInstant(airport.getTimezoneId()).toLocalDateTime();
         AirportContact airportContact = new AirportContact();
         airportContact.setAirport(airport);
-        airportContact.setLocalDateTime(departureTime.atZoneSameInstant(airport.getTimezoneId()).toLocalDateTime());
+        airportContact.setLocalDate(localDateTime.toLocalDate());
+        airportContact.setLocalTime(localDateTime.toLocalTime());
         return airportContact;
     }
 

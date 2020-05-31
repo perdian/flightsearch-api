@@ -1,7 +1,8 @@
 package de.perdian.flightsearch.api.model;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
@@ -20,9 +21,9 @@ public class FlightTest {
 
     @Test
     public void testEquals() {
-        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 3, 4));
-        AirportContact ac2 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 4, 5));
-        AirportContact ac3 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDateTime.of(2000, 1, 2, 6, 7));
+        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(3, 4));
+        AirportContact ac2 = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(4, 5));
+        AirportContact ac3 = new AirportContact(new Airport("JFK", ZoneId.of("America/New_York")), LocalDate.of(2000, 1, 2), LocalTime.of(6, 7));
         Leg l1 = new Leg(new Route(ac1, ac2), null);
         Leg l2 = new Leg(new Route(ac1, ac3), null);
         Segment s1 = new Segment(Arrays.asList(l1));
@@ -43,9 +44,9 @@ public class FlightTest {
         Airport a1 = new Airport("CGN", ZoneId.of("Europe/Berlin"));
         Airport a2 = new Airport("FRA", ZoneId.of("Europe/Berlin"));
         Airport a3 = new Airport("MUC", ZoneId.of("Europe/Berlin"));
-        Route r1 = new Route(new AirportContact(a1, LocalDateTime.of(2000, 1, 2, 12, 00)), new AirportContact(a2, LocalDateTime.of(2000, 1, 2, 12, 30)));
-        Route r2 = new Route(new AirportContact(a2, LocalDateTime.of(2000, 1, 2, 13, 15)), new AirportContact(a3, LocalDateTime.of(2000, 1, 2, 14, 15)));
-        Route r3 = new Route(new AirportContact(a3, LocalDateTime.of(2000, 1, 2, 15, 15)), new AirportContact(a2, LocalDateTime.of(2000, 1, 2, 17, 05)));
+        Route r1 = new Route(new AirportContact(a1, LocalDate.of(2000, 1, 2), LocalTime.of(12, 00)), new AirportContact(a2, LocalDate.of(2000, 1, 2), LocalTime.of(12, 30)));
+        Route r2 = new Route(new AirportContact(a2, LocalDate.of(2000, 1, 2), LocalTime.of(13, 15)), new AirportContact(a3, LocalDate.of(2000, 1, 2), LocalTime.of(14, 15)));
+        Route r3 = new Route(new AirportContact(a3, LocalDate.of(2000, 1, 2), LocalTime.of(15, 15)), new AirportContact(a2, LocalDate.of(2000, 1, 2), LocalTime.of(17, 05)));
         Segment s1 = new Segment(Arrays.asList(new Leg(r1, null)));
         Segment s2 = new Segment(Arrays.asList(new Leg(r2, null), new Leg(r3, null)));
         Flight flight = new Flight(Arrays.asList(s1, s2));

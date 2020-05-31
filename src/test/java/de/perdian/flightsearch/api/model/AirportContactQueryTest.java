@@ -1,7 +1,7 @@
 package de.perdian.flightsearch.api.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Assertions;
@@ -41,8 +41,8 @@ public class AirportContactQueryTest {
 
     @Test
     public void testTestWithAirportCodes() {
-        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 14, 45));
-        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 45));
+        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 45));
+        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 45));
         AirportContactQuery airportContactQuery = new AirportContactQuery();
         airportContactQuery.setAirportCodes(Arrays.asList("FRA"));
         Assertions.assertTrue(airportContactQuery.test(airportContact1));
@@ -51,8 +51,8 @@ public class AirportContactQueryTest {
 
     @Test
     public void testTestWithAirportCodesAndEnforceExactCodes() {
-        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 14, 45));
-        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 45));
+        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 45));
+        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 45));
         AirportContactQuery airportContactQuery = new AirportContactQuery();
         airportContactQuery.setAirportCodes(Arrays.asList("FRA"));
         airportContactQuery.setEnforceExactAirportCodes(true);
@@ -62,8 +62,8 @@ public class AirportContactQueryTest {
 
     @Test
     public void testTestWithDateTime() {
-        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 14, 45));
-        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 3, 14, 45));
+        AirportContact airportContact1 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 45));
+        AirportContact airportContact2 = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 3), LocalTime.of(14, 45));
         AirportContactQuery airportContactQuery = new AirportContactQuery();
         airportContactQuery.setDateTime(new DateTimeQuery(LocalDate.of(2000, 1, 2)));
         Assertions.assertTrue(airportContactQuery.test(airportContact1));

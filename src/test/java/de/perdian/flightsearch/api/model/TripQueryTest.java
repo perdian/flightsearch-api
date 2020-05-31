@@ -1,6 +1,7 @@
 package de.perdian.flightsearch.api.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,20 +30,20 @@ public class TripQueryTest {
         FlightQuery flightQuery2 = new FlightQuery();
         flightQuery2.setOriginAirportContact(new AirportContactQuery(Arrays.asList("FRA"), true));
 
-        AirportContact originContact1 = new AirportContact(new Airport("DUS"), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact destinationContact1 = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 15, 00));
+        AirportContact originContact1 = new AirportContact(new Airport("DUS"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
+        AirportContact destinationContact1 = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(15, 00));
         Leg leg1 = new Leg(new Route(originContact1, destinationContact1), null);
         Segment segment1 = new Segment(Arrays.asList(leg1));
         Flight flight1 = new Flight(Arrays.asList(segment1));
 
-        AirportContact originContact2a = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 16, 00));
-        AirportContact destinationContact2a = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 2, 20, 00));
+        AirportContact originContact2a = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(16, 00));
+        AirportContact destinationContact2a = new AirportContact(new Airport("JFK"), LocalDate.of(2000, 1, 2), LocalTime.of(20, 00));
         Leg leg2a = new Leg(new Route(originContact2a, destinationContact2a), null);
         Segment segment2a = new Segment(Arrays.asList(leg2a));
         Flight flight2a = new Flight(Arrays.asList(segment2a));
 
-        AirportContact originContact2b = new AirportContact(new Airport("MUC"), LocalDateTime.of(2000, 1, 2, 16, 00));
-        AirportContact destinationContact2b = new AirportContact(new Airport("EWR"), LocalDateTime.of(2000, 1, 2, 20, 00));
+        AirportContact originContact2b = new AirportContact(new Airport("MUC"), LocalDate.of(2000, 1, 2), LocalTime.of(16, 00));
+        AirportContact destinationContact2b = new AirportContact(new Airport("EWR"), LocalDate.of(2000, 1, 2), LocalTime.of(20, 00));
         Leg leg2b = new Leg(new Route(originContact2b, destinationContact2b), null);
         Segment segment2b = new Segment(Arrays.asList(leg2b));
         Flight flight2b = new Flight(Arrays.asList(segment2b));

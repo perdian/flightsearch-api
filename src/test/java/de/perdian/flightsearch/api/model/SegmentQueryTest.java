@@ -1,6 +1,7 @@
 package de.perdian.flightsearch.api.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 
@@ -24,8 +25,8 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithLegQuery() {
-        AirportContact ac1a = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact ac1b = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
+        AirportContact ac1a = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
+        AirportContact ac1b = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(15, 05));
         Leg leg1 = new Leg(new Route(ac1a, ac1b), null);
         Segment segment1 = new Segment(Arrays.asList(leg1));
 
@@ -36,8 +37,8 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithLegQueryFailed() {
-        AirportContact ac1a = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact ac1b = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
+        AirportContact ac1a = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
+        AirportContact ac1b = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(15, 05));
         Leg leg1 = new Leg(new Route(ac1a, ac1b), null);
         Segment segment1 = new Segment(Arrays.asList(leg1));
 
@@ -106,8 +107,8 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithOriginAirportContact() {
-        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
         Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Origin, machtchingLeg1Destination), null);
         Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
         Segment otherSegment = new Segment();
@@ -119,8 +120,8 @@ public class SegmentQueryTest {
 
     @Test
     public void testTestWithDestinationAirportContact() {
-        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDateTime.of(2000, 1, 2, 14, 00));
+        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
         Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Origin, machtchingLeg1Destination), null);
         Segment matchingSegment = new Segment(Arrays.asList(matchingLeg1));
         Segment otherSegment = new Segment();
@@ -132,9 +133,9 @@ public class SegmentQueryTest {
 
     @Test
     public void testAll() {
-        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 14, 00));
-        AirportContact ac2a = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
-        AirportContact ac2b = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 15, 05));
+        AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
+        AirportContact ac2a = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(15, 05));
+        AirportContact ac2b = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(15, 05));
         Leg leg1 = new Leg(new Route(ac1, ac2a), null);
         Segment segment1 = new Segment(Arrays.asList(leg1));
         Leg leg2 = new Leg(new Route(ac1, ac2b), null);

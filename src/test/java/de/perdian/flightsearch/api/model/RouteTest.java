@@ -1,7 +1,8 @@
 package de.perdian.flightsearch.api.model;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 
 import org.junit.jupiter.api.Assertions;
@@ -21,13 +22,13 @@ public class RouteTest {
     @Test
     @SuppressWarnings("unlikely-arg-type")
     public void testEquals() {
-        AirportContact originContact1 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact destinationContact1 = new AirportContact(new Airport("MCO"), LocalDateTime.of(2000, 1, 2, 16, 00));
+        AirportContact originContact1 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact destinationContact1 = new AirportContact(new Airport("MCO"), LocalDate.of(2000, 1, 2), LocalTime.of(16, 00));
         Route route1 = new Route(originContact1, destinationContact1);
-        AirportContact originContact2 = new AirportContact(new Airport("CGN"), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact destinationContact2 = new AirportContact(new Airport("MCO"), LocalDateTime.of(2000, 1, 2, 16, 00));
+        AirportContact originContact2 = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact destinationContact2 = new AirportContact(new Airport("MCO"), LocalDate.of(2000, 1, 2), LocalTime.of(16, 00));
         Route route2 = new Route(originContact2, destinationContact2);
-        AirportContact contact4 = new AirportContact(new Airport("JFK"), LocalDateTime.of(2000, 1, 2, 13, 00));
+        AirportContact contact4 = new AirportContact(new Airport("JFK"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
         Route route1x = new Route(originContact1, contact4);
         Route route1y = new Route(contact4, destinationContact1);
         Assertions.assertEquals(route1, route1);
@@ -40,8 +41,8 @@ public class RouteTest {
 
     @Test
     public void testGetDuration() {
-        AirportContact originContact = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 13, 00));
-        AirportContact destinationContact = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDateTime.of(2000, 1, 2, 16, 00));
+        AirportContact originContact = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact destinationContact = new AirportContact(new Airport("FRA", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(16, 00));
         Route route = new Route(originContact, destinationContact);
         Assertions.assertEquals(Duration.ofHours(3), route.getDuration());
     }
