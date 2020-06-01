@@ -34,10 +34,10 @@ import de.perdian.flightsearch.api.model.Segment;
 
 public class LufthansaPdfScheduleLoader implements ScheduleLoader {
 
-    private static Pattern ORIGIN_AIRPORT_LINE_PATTERN = Pattern.compile("^(.*?)\s+([+-]\\d{2}\\:\\d{2})([A-Z]{3})$");
-    private static Pattern DESTINATION_AIRPORT_LINE_PATTERN = Pattern.compile("^→\\s+(.*?)\s([A-Z]{3})\\s+([+-]\\d{2}\\:\\d{2})$");
+    private static Pattern ORIGIN_AIRPORT_LINE_PATTERN = Pattern.compile("^(.*?)\\s+([+-]\\d{2}\\:\\d{2})([A-Z]{3})$");
+    private static Pattern DESTINATION_AIRPORT_LINE_PATTERN = Pattern.compile("^\u2192\\s+(.*?)\\s([A-Z]{3})\\s+([+-]\\d{2}\\:\\d{2})$");
     private static Pattern DESTINATION_AIRPORT_REPEATER_LINE_PATTERN = Pattern.compile("^→\\s+(.*?)$");
-    private static Pattern SELECTION_AIRPORT_LINE_PATTERN = Pattern.compile("^([A-Z]{3})\\s+(.*?)\s*([A-Z]?)$");
+    private static Pattern SELECTION_AIRPORT_LINE_PATTERN = Pattern.compile("^([A-Z]{3})\\s+(.*?)\\s*([A-Z]?)$");
     private static Pattern ENTRY_PATTERN = Pattern.compile("^([X1-7]+)\\s+([A-Z]?\\d{2}[A-Z]?\\:\\d{2})\\s*(\\d{2}\\:\\d{2}[A-Z]?)\\+?\\s([A-Z0-9]{2}[0-9]+.*?)\\s+([A-Z0-9]{3,4})\\s*$");
     private static Pattern SOURCE_FILE_PATTERN = Pattern.compile("^V1_(.*?)_to_(.*?)\\.pdf$");
     private static Pattern FLIGHTNUMBER_DIRECT_PATTERN = Pattern.compile("^([A-Z0-9]{2})([0-9]+)$");
