@@ -7,6 +7,7 @@ import java.net.URL;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,47 +45,56 @@ public class AirportRepository {
             }
             log.debug("Loaded {} countries from resource: {}", countryCodesByTitle.size(), countriesResourceURL);
 
-            URL airportsResourceURL = AirportRepository.class.getResource("/META-INF/flightsearch-api/airports-extended.dat");
-            log.debug("Loading airports from resource: {}", airportsResourceURL);
             Map<String, Airport> airportsByCode = new LinkedHashMap<>();
-            try (BufferedReader airportsReader = new BufferedReader(new InputStreamReader(airportsResourceURL.openStream(), "UTF-8"))) {
-                for (String airportLine = airportsReader.readLine(); airportLine != null; airportLine = airportsReader.readLine()) {
-                    try {
+            List<String> airportsResourceValues = Arrays.asList("/META-INF/flightsearch-api/airports-extended.dat", "/META-INF/flightsearch-api/airports-manual.dat");
+            for (String airportsResourceValue : airportsResourceValues) {
 
-                        List<String> lineFields = AirportRepository.tokenizeLine(airportLine);
-                        String iataCode = lineFields.get(4);
-                        ZoneOffset zoneOffset = null;
-                        String zoneOffsetString = lineFields.get(9);
-                        if (zoneOffsetString != null && !zoneOffsetString.equals("\\N")) {
-                            float zoneOffsetValue = Float.parseFloat(lineFields.get(9));
-                            int zoneOffsetHours = (int)zoneOffsetValue;
-                            int zoneOffsetMinutes = (int)((Math.abs(zoneOffsetValue) - Math.abs(zoneOffsetHours)) * 60 * Math.signum(zoneOffsetValue));
-                            zoneOffset = ZoneOffset.ofHoursMinutes(zoneOffsetHours, zoneOffsetMinutes);
+                URL airportsResourceURL = AirportRepository.class.getResource(airportsResourceValue);
+                log.debug("Loading airports from resource: {}", airportsResourceURL);
+                try (BufferedReader airportsReader = new BufferedReader(new InputStreamReader(airportsResourceURL.openStream(), "UTF-8"))) {
+                    for (String airportLine = airportsReader.readLine(); airportLine != null; airportLine = airportsReader.readLine()) {
+                        if (airportLine.isEmpty() || airportLine.startsWith("#")) {
+                            continue;
+                        } else {
+                            try {
+
+                                List<String> lineFields = AirportRepository.tokenizeLine(airportLine);
+                                String iataCode = lineFields.get(4);
+                                ZoneOffset zoneOffset = null;
+                                String zoneOffsetString = lineFields.get(9);
+                                if (zoneOffsetString != null && !zoneOffsetString.equals("\\N")) {
+                                    float zoneOffsetValue = Float.parseFloat(lineFields.get(9));
+                                    int zoneOffsetHours = (int)zoneOffsetValue;
+                                    int zoneOffsetMinutes = (int)((Math.abs(zoneOffsetValue) - Math.abs(zoneOffsetHours)) * 60 * Math.signum(zoneOffsetValue));
+                                    zoneOffset = ZoneOffset.ofHoursMinutes(zoneOffsetHours, zoneOffsetMinutes);
+                                }
+
+                                String zoneIdValue = lineFields.get(11);
+                                ZoneId zoneId = zoneIdValue == null || zoneIdValue.equalsIgnoreCase("\\N") ? null : ZoneId.of(zoneIdValue);
+
+                                Airport airport = new Airport();
+                                airport.setName(lineFields.get(1));
+                                airport.setCity(lineFields.get(2));
+                                airport.setCountryCode(countryCodesByTitle.get(lineFields.get(3)));
+                                airport.setCode(iataCode);
+                                airport.setLatitude(Float.parseFloat(lineFields.get(6)));
+                                airport.setLongitude(Float.parseFloat(lineFields.get(7)));
+                                airport.setTimezoneOffset(zoneOffset);
+                                airport.setTimezoneId(zoneId);
+                                airport.setType(AirportType.parseValue(lineFields.get(12)));
+                                airportsByCode.put(iataCode, airport);
+
+                            } catch (Exception e) {
+                                log.warn("Invalid airport line: {}", airportLine, e);
+                            }
                         }
-
-                        String zoneIdValue = lineFields.get(11);
-                        ZoneId zoneId = zoneIdValue == null || zoneIdValue.equalsIgnoreCase("\\N") ? null : ZoneId.of(zoneIdValue);
-
-                        Airport airport = new Airport();
-                        airport.setName(lineFields.get(1));
-                        airport.setCity(lineFields.get(2));
-                        airport.setCountryCode(countryCodesByTitle.get(lineFields.get(3)));
-                        airport.setCode(iataCode);
-                        airport.setLatitude(Float.parseFloat(lineFields.get(6)));
-                        airport.setLongitude(Float.parseFloat(lineFields.get(7)));
-                        airport.setTimezoneOffset(zoneOffset);
-                        airport.setTimezoneId(zoneId);
-                        airport.setType(AirportType.parseValue(lineFields.get(12)));
-                        airportsByCode.put(iataCode, airport);
-
-                    } catch (Exception e) {
-                        log.warn("Invalid airport line: {}", airportLine, e);
                     }
                 }
+
             }
 
             this.setAirportsByCode(airportsByCode);
-            log.debug("Loaded {} airports from resource: {}", airportsByCode.size(), airportsResourceURL);
+            log.debug("Loaded {} airports from {} resources", airportsByCode.size(), airportsResourceValues.size());
 
         } catch (IOException e) {
             throw new RuntimeException("Cannot initialilze AirportRepository", e);
