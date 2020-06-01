@@ -11,11 +11,19 @@ public class Schedule implements Serializable {
 
     static final long serialVersionUID = 1L;
 
+    private String source = null;
     private List<ScheduleEntry> entries = Collections.emptyList();
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+    }
+
+    public String getSource() {
+        return this.source;
+    }
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public List<ScheduleEntry> getEntries() {

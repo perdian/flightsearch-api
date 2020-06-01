@@ -39,7 +39,7 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
     private static Pattern DESTINATION_AIRPORT_REPEATER_LINE_PATTERN = Pattern.compile("^→\\s+(.*?)$");
     private static Pattern SELECTION_AIRPORT_LINE_PATTERN = Pattern.compile("^([A-Z]{3})\\s+(.*?)\\s*([A-Z]?)$");
     private static Pattern ENTRY_PATTERN = Pattern.compile("^([X1-7]+)\\s+([A-Z]?\\d{2}[A-Z]?\\:\\d{2})\\s*(\\d{2}\\:\\d{2}[A-Z]?)\\+?\\s([A-Z0-9]{2}[0-9]+.*?)\\s+([A-Z0-9]{3,4})\\s*$");
-    private static Pattern SOURCE_FILE_PATTERN = Pattern.compile("^V1_(.*?)_to_(.*?)\\.pdf$");
+    private static Pattern SOURCE_FILE_PATTERN = Pattern.compile("^V1_(.*?)_to_(.*?)_.*?\\.pdf$");
     private static Pattern FLIGHTNUMBER_DIRECT_PATTERN = Pattern.compile("^([A-Z0-9]{2})([0-9]+)$");
     private static Pattern FLIGHTNUMBER_CODESHARE_PATTERN = Pattern.compile("^([A-Z0-9]{2})([0-9]+)\\(([A-Z0-9]{2})\\)$");
 
@@ -119,6 +119,7 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
             }
 
             Schedule schedule = new Schedule();
+            schedule.setSource(this.getSourceFile().getName());
             schedule.setEntries(loaderContext.getEntries());
             return schedule;
 
