@@ -15,6 +15,14 @@ public class AirlineQueryTest {
     }
 
     @Test
+    public void testConstructorWithRestrictCodes() {
+        AirlineQuery airlineQuery = new AirlineQuery(Arrays.asList("XY"));
+        Assertions.assertEquals(1, airlineQuery.getRestrictCodes().size());
+        Assertions.assertTrue(airlineQuery.getRestrictCodes().contains("XY"));
+        Assertions.assertNull(airlineQuery.getExcludeCodes());
+    }
+
+    @Test
     public void testTest() {
         AirlineQuery airlineQuery = new AirlineQuery();
         Assertions.assertTrue(airlineQuery.test(new Airline()));

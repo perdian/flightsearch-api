@@ -11,6 +11,13 @@ public class AirlineQuery implements Serializable, Predicate<Airline> {
     private List<String> restrictCodes = null;
     private List<String> excludeCodes = null;
 
+    public AirlineQuery() {
+    }
+
+    public AirlineQuery(List<String> restrictCodes) {
+        this.setRestrictCodes(restrictCodes);
+    }
+
     @Override
     public boolean test(Airline airline) {
         if (!this.testCodes(airline)) {
