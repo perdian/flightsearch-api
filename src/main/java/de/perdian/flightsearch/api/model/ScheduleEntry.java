@@ -14,8 +14,8 @@ public class ScheduleEntry implements Serializable {
     static final long serialVersionUID = 1L;
 
     private Segment segment = null;
-    private LocalDate startDate = null;
-    private LocalDate endDate = null;
+    private LocalDate validFrom = null;
+    private LocalDate validTo = null;
     private List<DayOfWeek> days = Collections.emptyList();
 
     @Override
@@ -30,18 +30,18 @@ public class ScheduleEntry implements Serializable {
         this.segment = segment;
     }
 
-    public LocalDate getStartDate() {
-        return this.startDate;
+    public LocalDate getValidFrom() {
+        return this.validFrom;
     }
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setValidFrom(LocalDate validFrom) {
+        this.validFrom = validFrom;
     }
 
-    public LocalDate getEndDate() {
-        return this.endDate;
+    public LocalDate getValidTo() {
+        return this.validTo;
     }
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setValidTo(LocalDate validTo) {
+        this.validTo = validTo;
     }
 
     public List<DayOfWeek> getDays() {

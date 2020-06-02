@@ -132,6 +132,20 @@ public class SegmentQueryTest {
     }
 
     @Test
+    public void testTestWithOperator() {
+        AirportContact machtchingLeg1Origin = new AirportContact(new Airport("CGN"), LocalDate.of(2000, 1, 2), LocalTime.of(13, 00));
+        AirportContact machtchingLeg1Destination = new AirportContact(new Airport("FRA"), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
+        Leg matchingLeg1 = new Leg(new Route(machtchingLeg1Origin, machtchingLeg1Destination), null);
+        Segment segment = new Segment(Arrays.asList(matchingLeg1));
+        segment.setOperatingAirline(new Airline("XY"));
+        AirlineQuery airlineQuery = new AirlineQuery();
+        airlineQuery.setRestrictCodes(Arrays.asList("LH"));
+        SegmentQuery segmentQuery = new SegmentQuery();
+        segmentQuery.setOperator(airlineQuery);
+        Assertions.assertFalse(segmentQuery.test(segment));
+    }
+
+    @Test
     public void testAll() {
         AirportContact ac1 = new AirportContact(new Airport("CGN", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(14, 00));
         AirportContact ac2a = new AirportContact(new Airport("MUC", ZoneId.of("Europe/Berlin")), LocalDate.of(2000, 1, 2), LocalTime.of(15, 05));

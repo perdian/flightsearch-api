@@ -16,6 +16,7 @@ public class SegmentQuery implements Predicate<Segment>, Serializable {
     private FlightNumber flightNumber = null;
     private FlightNumber operatingFlightNumber = null;
     private FlightNumber marketingFlightNumber = null;
+    private AirlineQuery operator = null;
     private AirportContactQuery originAirportContact = null;
     private AirportContactQuery destinationAirportContact = null;
 
@@ -52,6 +53,8 @@ public class SegmentQuery implements Predicate<Segment>, Serializable {
         } else if (this.getOperatingFlightNumber() != null && !this.getOperatingFlightNumber().equals(segment.getOperatingFlightNumber())) {
             return false;
         } else if (this.getMarketingFlightNumber() != null && !this.getMarketingFlightNumber().equals(segment.getMarketingFlightNumber())) {
+            return false;
+        } else if (this.getOperator() != null && segment.getOperatingAirline() != null && !this.getOperator().test(segment.getOperatingAirline())) {
             return false;
         } else if (!this.testFlightNumber(segment)) {
             return false;
@@ -115,6 +118,13 @@ public class SegmentQuery implements Predicate<Segment>, Serializable {
     }
     public void setMarketingFlightNumber(FlightNumber marketingFlightNumber) {
         this.marketingFlightNumber = marketingFlightNumber;
+    }
+
+    public AirlineQuery getOperator() {
+        return this.operator;
+    }
+    public void setOperator(AirlineQuery operator) {
+        this.operator = operator;
     }
 
     public AirportContactQuery getOriginAirportContact() {

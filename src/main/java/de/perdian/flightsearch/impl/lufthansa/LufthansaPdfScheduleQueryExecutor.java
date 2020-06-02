@@ -12,13 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.perdian.flightsearch.api.ScheduleLoader;
+import de.perdian.flightsearch.api.ScheduleQueryExecutor;
 import de.perdian.flightsearch.api.model.Aircraft;
 import de.perdian.flightsearch.api.model.AircraftType;
 import de.perdian.flightsearch.api.model.AircraftTypeRepository;
@@ -30,9 +31,10 @@ import de.perdian.flightsearch.api.model.Leg;
 import de.perdian.flightsearch.api.model.Route;
 import de.perdian.flightsearch.api.model.Schedule;
 import de.perdian.flightsearch.api.model.ScheduleEntry;
+import de.perdian.flightsearch.api.model.ScheduleQuery;
 import de.perdian.flightsearch.api.model.Segment;
 
-public class LufthansaPdfScheduleLoader implements ScheduleLoader {
+public class LufthansaPdfScheduleQueryExecutor implements ScheduleQueryExecutor {
 
     private static Pattern ORIGIN_AIRPORT_LINE_PATTERN = Pattern.compile("^(.*?)\\s+([+-]\\d{2}\\:\\d{2})([A-Z]{3})$");
     private static Pattern DESTINATION_AIRPORT_LINE_PATTERN = Pattern.compile("^\u2192\\s+(.*?)\\s([A-Z]{3})\\s+([+-]\\d{2}\\:\\d{2})$");
@@ -43,23 +45,23 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
     private static Pattern FLIGHTNUMBER_DIRECT_PATTERN = Pattern.compile("^([A-Z0-9]{2})([0-9]+)$");
     private static Pattern FLIGHTNUMBER_CODESHARE_PATTERN = Pattern.compile("^([A-Z0-9]{2})([0-9]+)\\(([A-Z0-9]{2})\\)$");
 
-    private static final Logger log = LoggerFactory.getLogger(LufthansaPdfScheduleLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(LufthansaPdfScheduleQueryExecutor.class);
     private File sourceFile = null;
 
-    public LufthansaPdfScheduleLoader(File sourceFile) {
+    public LufthansaPdfScheduleQueryExecutor(File sourceFile) {
         this.setSourceFile(sourceFile);
     }
 
     @Override
-    public Schedule loadSchedule() throws IOException {
+    public Schedule loadSchedule(ScheduleQuery scheduleQuery) throws IOException {
 
-        LocalDate startDate = null;
-        LocalDate endDate = null;
+        LocalDate validFrom = null;
+        LocalDate validTo = null;
         String sourceFileName = this.getSourceFile().getName();
         Matcher sourceFileMatcher = SOURCE_FILE_PATTERN.matcher(sourceFileName);
         if (sourceFileMatcher.matches()) {
-            startDate = LocalDate.parse(sourceFileMatcher.group(1));
-            endDate = LocalDate.parse(sourceFileMatcher.group(2));
+            validFrom = LocalDate.parse(sourceFileMatcher.group(1));
+            validTo = LocalDate.parse(sourceFileMatcher.group(2));
         }
 
         try (PDDocument pdfDocument = PDDocument.load(this.getSourceFile())) {
@@ -109,7 +111,7 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
 
                     Matcher entryMatcher = ENTRY_PATTERN.matcher(line);
                     if (entryMatcher.matches()) {
-                        this.parseScheduleEntry(entryMatcher, startDate, endDate, loaderContext);
+                        this.parseScheduleEntry(entryMatcher, validFrom, validTo, loaderContext);
                         continue;
                     }
 
@@ -118,15 +120,19 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
                 }
             }
 
+            List<ScheduleEntry> scheduleEntries = loaderContext.getEntries().stream()
+                .filter(entry -> scheduleQuery.getEntry() == null || scheduleQuery.getEntry().test(entry))
+                .collect(Collectors.toList());
+
             Schedule schedule = new Schedule();
             schedule.setSource(this.getSourceFile().getName());
-            schedule.setEntries(loaderContext.getEntries());
+            schedule.setEntries(scheduleEntries);
             return schedule;
 
         }
     }
 
-    private void parseScheduleEntry(Matcher entryMatcher, LocalDate startDate, LocalDate endDate, LufthansaPdfScheduleLoaderContext loaderContext) {
+    private void parseScheduleEntry(Matcher entryMatcher, LocalDate validFrom, LocalDate validTo, LufthansaPdfScheduleLoaderContext loaderContext) {
 
         Airport originAirport = loaderContext.getCurrentOriginAirport();
         String departureTimeString = entryMatcher.group(2);
@@ -189,8 +195,8 @@ public class LufthansaPdfScheduleLoader implements ScheduleLoader {
 
             ScheduleEntry scheduleEntry = new ScheduleEntry();
             scheduleEntry.setSegment(segment);
-            scheduleEntry.setStartDate(startDate);
-            scheduleEntry.setEndDate(endDate);
+            scheduleEntry.setValidFrom(validFrom);
+            scheduleEntry.setValidTo(validTo);
             scheduleEntry.setDays(this.parseDays(entryMatcher.group(1)));
             loaderContext.pushEntry(scheduleEntry);
 

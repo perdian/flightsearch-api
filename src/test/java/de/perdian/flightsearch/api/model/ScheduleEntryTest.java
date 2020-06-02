@@ -9,9 +9,6 @@ public class ScheduleEntryTest {
     public void testConstructor() {
         ScheduleEntry scheduleEntry = new ScheduleEntry();
         Assertions.assertEquals(0, scheduleEntry.getDays().size());
-        Assertions.assertNull(scheduleEntry.getEndDate());
-        Assertions.assertNull(scheduleEntry.getSegment());
-        Assertions.assertNull(scheduleEntry.getStartDate());
     }
 
 }
